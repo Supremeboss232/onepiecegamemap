@@ -255,4 +255,4 @@ class CharacterGenerator {
   }
 }
 
-module.exports = CharacterGenerator;
+export default CharacterGenerator;
