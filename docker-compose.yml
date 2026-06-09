@@ -1,0 +1,80 @@
+version: '3.9'
+
+services:
+  # Backend server
+  backend:
+    build: .
+    container_name: onepiece-backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production}
+      INACTIVITY_LIMIT_DAYS: 14
+      CONGESTION_STATIC_HOURS: 48
+      CONGESTION_SHIP_THRESHOLD: 3
+      CONGESTION_SHIP_DAMAGE: 200
+      BLUES_BOUNTY_THRESHOLD: 100000000
+      BLUES_STATIC_MINUTES: 60
+      BLUES_AGGRESSION_MULTIPLIER: 5
+    volumes:
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+    depends_on:
+      - redis
+    networks:
+      - onepiece-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  # Redis cache layer
+  redis:
+    image: redis:7-alpine
+    container_name: onepiece-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redis-data:/data
+    networks:
+      - onepiece-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Frontend (optional - for development with hot reload)
+  frontend:
+    image: node:18-alpine
+    container_name: onepiece-frontend
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./src/frontend:/app
+    environment:
+      REACT_APP_API_BASE: http://localhost:3000
+      REACT_APP_WS_URL: ws://localhost:3000
+      PORT: 3001
+    networks:
+      - onepiece-net
+    depends_on:
+      - backend
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  onepiece-net:
+    driver: bridge

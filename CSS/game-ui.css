@@ -1,0 +1,161 @@
+/* Game UI Styles */
+.game-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #d4af37;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+}
+
+.game-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 10px;
+}
+
+.game-section {
+  margin-bottom: 15px;
+}
+
+.game-section h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ship-entry, .crew-entry, .event-entry {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  margin: 5px 0;
+  border-left: 3px solid #d4af37;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ship-entry:hover, .crew-entry:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.event-entry {
+  cursor: default;
+}
+
+.game-button {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #d4af37;
+  color: #000;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  margin: 3px;
+  transition: all 0.2s ease;
+}
+
+.game-button:hover {
+  background: #e5c158;
+  transform: scale(1.05);
+}
+
+.game-button:active {
+  transform: scale(0.95);
+}
+
+.game-button.disabled {
+  background: #666;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.status-message {
+  padding: 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.status-message.success {
+  background: rgba(81, 207, 102, 0.2);
+  border-left: 3px solid #51cf66;
+  color: #51cf66;
+}
+
+.status-message.error {
+  background: rgba(255, 107, 107, 0.2);
+  border-left: 3px solid #ff6b6b;
+  color: #ff6b6b;
+}
+
+.status-message.info {
+  background: rgba(77, 171, 247, 0.2);
+  border-left: 3px solid #4dabf7;
+  color: #4dabf7;
+}
+
+.anomaly-warning {
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid #ffc107;
+  padding: 10px;
+  border-radius: 3px;
+  margin: 10px 0;
+  color: #ffc107;
+  font-size: 11px;
+}
+
+.unique-badge {
+  display: inline-block;
+  background: #d4af37;
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.territory-marker {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: #d4af37;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.node-label {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+}
+
+.ship-route {
+  stroke: #d4af37;
+  stroke-width: 2;
+  opacity: 0.6;
+  fill: none;
+  stroke-dasharray: 5, 5;
+}
+
+.hazard-edge {
+  stroke: #ff6b6b;
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.safe-edge {
+  stroke: #51cf66;
+  stroke-width: 1;
+  opacity: 0.4;
+}

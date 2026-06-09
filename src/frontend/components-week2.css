@@ -1,0 +1,647 @@
+/* ========================================
+   DAVY BACK FIGHT PANEL STYLES
+   ======================================== */
+
+.davy-back-fight-panel {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #e67e22;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.davy-back-fight-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e67e22;
+}
+
+.davy-back-fight-panel .panel-header h3 {
+  color: #e67e22;
+  margin: 0;
+  font-size: 14px;
+}
+
+.tournament-progress {
+  background: #e67e22;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.tournament-intro {
+  padding: 8px;
+}
+
+.tournament-intro p {
+  color: #ccc;
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.games-preview {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.game-preview-card {
+  background: rgba(230, 126, 34, 0.1);
+  border: 1px solid #e67e22;
+  border-radius: 4px;
+  padding: 6px;
+  text-align: center;
+  font-size: 9px;
+}
+
+.game-preview-card .game-icon {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.game-preview-card .game-name {
+  color: #e67e22;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.game-preview-card .game-reward {
+  color: #ffd700;
+  font-size: 8px;
+}
+
+.total-possible {
+  text-align: center;
+  color: #ffd700;
+  font-weight: bold;
+  margin: 8px 0 !important;
+}
+
+.start-tournament-btn {
+  width: 100%;
+  background: #e67e22;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.start-tournament-btn:hover:not(:disabled) {
+  background: #d68910;
+  box-shadow: 0 0 10px #e67e22;
+}
+
+.start-tournament-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   TOURNAMENT ACTIVE STATE
+   ======================================== */
+
+.davy-back-fight-panel.tournament-active {
+  border-color: #27ae60;
+}
+
+.davy-back-fight-panel.tournament-active .panel-header {
+  border-bottom-color: #27ae60;
+}
+
+.davy-back-fight-panel.tournament-active .panel-header h3 {
+  color: #27ae60;
+}
+
+.tournament-progress {
+  background: #27ae60 !important;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  transition: width 0.5s ease;
+}
+
+.game-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.tournament-stats {
+  background: rgba(39, 174, 96, 0.1);
+  border-left: 2px solid #27ae60;
+  padding: 6px;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.tournament-stats p {
+  margin: 2px 0;
+  color: #ccc;
+}
+
+/* ========================================
+   GAME RESULT STYLES
+   ======================================== */
+
+.game-result {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #27ae60;
+  border-radius: 4px;
+  padding: 12px;
+  text-align: center;
+}
+
+.game-result h3 {
+  color: #2ecc71;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+
+.game-result .bounty {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.game-result button {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.game-result button:hover {
+  background: #229954;
+}
+
+/* ========================================
+   BINGO GAME STYLES
+   ======================================== */
+
+.bingo-game {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.bingo-game .game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bingo-game h3 {
+  margin: 0;
+  color: #ffd700;
+  font-size: 12px;
+}
+
+.bingo-game .timer {
+  background: #e67e22;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.bingo-game .instructions {
+  color: #ccc;
+  font-size: 10px;
+  margin: 6px 0;
+}
+
+.bingo-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.bingo-cell {
+  aspect-ratio: 1;
+  background: rgba(74, 144, 226, 0.2);
+  border: 2px solid #4a90e2;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a90e2;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bingo-cell:hover {
+  background: rgba(74, 144, 226, 0.4);
+  transform: scale(1.05);
+}
+
+.bingo-cell.selected {
+  background: #4a90e2;
+  color: white;
+  box-shadow: 0 0 8px #4a90e2;
+}
+
+.selected-count {
+  color: #ccc;
+  font-size: 10px;
+  margin-bottom: 6px;
+}
+
+.finish-btn {
+  width: 100%;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+/* ========================================
+   DODGEBALL GAME STYLES
+   ======================================== */
+
+.dodgeball-game {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+}
+
+.dodgeball-game .game-header {
+  margin-bottom: 8px;
+}
+
+.dodgeball-game h3 {
+  color: #ff6b6b;
+  margin: 0 0 4px 0;
+  font-size: 12px;
+}
+
+.dodgeball-game p {
+  color: #ccc;
+  font-size: 10px;
+  margin: 4px 0;
+}
+
+.game-canvas {
+  border: 2px solid #4a90e2;
+  border-radius: 3px;
+  display: block;
+  margin: 0 auto;
+  background: #0a0e27;
+}
+
+/* ========================================
+   BOXING GAME STYLES
+   ======================================== */
+
+.boxing-game {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.boxing-game .game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.boxing-game h3 {
+  color: #e67e22;
+  margin: 0;
+  font-size: 12px;
+}
+
+.boxing-arena {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.fighter-section {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  padding: 6px;
+}
+
+.fighter-section .fighter-name {
+  color: #ccc;
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.health-bar {
+  width: 100%;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  transition: width 0.3s ease;
+}
+
+.fighter-section.opponent .health-fill {
+  background: linear-gradient(90deg, #ff6b6b, #ff4444);
+}
+
+.health-text {
+  color: #999;
+  font-size: 9px;
+}
+
+.vs-text {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.message-box {
+  background: rgba(230, 126, 34, 0.1);
+  border-left: 2px solid #e67e22;
+  padding: 6px;
+  margin-bottom: 6px;
+  color: #ffd700;
+  font-size: 10px;
+  min-height: 16px;
+}
+
+.damage-counter {
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.punch-btn,
+.block-btn {
+  padding: 6px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 10px;
+  transition: all 0.2s ease;
+}
+
+.punch-btn {
+  background: #e67e22;
+  color: white;
+}
+
+.punch-btn:hover:not(:disabled) {
+  background: #d68910;
+}
+
+.block-btn {
+  background: #4a90e2;
+  color: white;
+}
+
+.block-btn:hover:not(:disabled) {
+  background: #3a7bc8;
+}
+
+.punch-btn:disabled,
+.block-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   BOAT RACE GAME STYLES
+   ======================================== */
+
+.boat-race-game {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+}
+
+.boat-race-game .game-header {
+  margin-bottom: 8px;
+}
+
+.boat-race-game h3 {
+  color: #3498db;
+  margin: 0 0 4px 0;
+  font-size: 12px;
+}
+
+.boat-race-game p {
+  color: #ccc;
+  font-size: 10px;
+  margin: 4px 0;
+}
+
+.boat-race-game .stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 10px;
+}
+
+.boat-race-game .stats div {
+  background: rgba(52, 152, 219, 0.1);
+  border-left: 2px solid #3498db;
+  padding: 4px;
+  color: #3498db;
+}
+
+/* ========================================
+   TREASURE HUNT GAME STYLES
+   ======================================== */
+
+.treasure-hunt-game {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.treasure-hunt-game .game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.treasure-hunt-game h3 {
+  color: #f39c12;
+  margin: 0;
+  font-size: 12px;
+}
+
+.hunt-info {
+  background: rgba(243, 156, 18, 0.1);
+  border: 1px solid #f39c12;
+  border-radius: 3px;
+  padding: 6px;
+  margin-bottom: 8px;
+}
+
+.found-count {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 11px;
+  margin: 2px 0;
+}
+
+.hint-text {
+  color: #f39c12;
+  font-size: 10px;
+  margin: 4px 0 2px 0;
+  min-height: 14px;
+}
+
+.treasure-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.grid-cell {
+  aspect-ratio: 1;
+  background: rgba(243, 156, 18, 0.2);
+  border: 1px solid #f39c12;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.grid-cell:hover {
+  background: rgba(243, 156, 18, 0.4);
+  transform: scale(1.05);
+}
+
+.grid-cell.found {
+  background: #f39c12;
+  border-color: #ffd700;
+  animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.treasure-hunt-game .instructions {
+  color: #ccc;
+  font-size: 9px;
+  margin: 6px 0 0 0;
+}
+
+/* ========================================
+   RESULTS SUMMARY
+   ======================================== */
+
+.results-summary {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  padding: 6px;
+  margin-top: 6px;
+}
+
+.results-summary h4 {
+  color: #e67e22;
+  margin: 0 0 6px 0;
+  font-size: 11px;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 2px solid #999;
+  border-radius: 2px;
+  font-size: 9px;
+}
+
+.result-item.success {
+  border-left-color: #2ecc71;
+  background: rgba(46, 204, 113, 0.1);
+}
+
+.result-item.fail {
+  border-left-color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.result-item .game-name {
+  color: #ccc;
+  flex: 1;
+}
+
+.result-item .bounty {
+  color: #ffd700;
+  font-weight: bold;
+}

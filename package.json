@@ -1,0 +1,32 @@
+{
+  "name": "onepiece-game-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Production One Piece Interactive Web-Map Game Engine",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "migrate": "node scripts/run_migration.js",
+    "seed": "node scripts/seed_database.js",
+    "release-inactive": "node scripts/release_inactive.js",
+    "check-congestion": "node scripts/check_congestion.js",
+    "faction-aggression": "node scripts/faction_aggression.js",
+    "maintenance": "node scripts/maintenance_runner.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "@fastify/jwt": "^7.2.4",
+    "@fastify/static": "^6.12.0",
+    "@fastify/websocket": "^8.3.1",
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.25.1",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "node-cron": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

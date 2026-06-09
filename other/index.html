@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Piece Interactive Game</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="CSS/leaflet.css" />
+  <link rel="stylesheet" href="CSS/leaflet.label.css" />
+  <link rel="stylesheet" href="CSS/MarkerCluster.css" />
+  <link rel="stylesheet" href="CSS/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="CSS/L.Control.Window.css" />
+  <link rel="stylesheet" href="CSS/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="CSS/leaflet-search.css" />
+  <link rel="stylesheet" href="CSS/leaflet-sidepanel.css" />
+  <link rel="stylesheet" href="CSS/L.Control.MousePosition.css" />
+
+  <!-- Game UI CSS -->
+  <link rel="stylesheet" href="CSS/game-ui.css" />
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; width: 100%; }
+    #map { height: 100%; width: 100%; }
+    .sidebar { position: absolute; top: 60px; right: 10px; width: 350px; background: rgba(0,0,0,0.85); color: #fff; padding: 15px; border-radius: 5px; font-family: Arial, sans-serif; max-height: 600px; overflow-y: auto; z-index: 1000; }
+    .sidebar h3 { margin-bottom: 10px; border-bottom: 2px solid #d4af37; padding-bottom: 5px; }
+    .sidebar-section { margin-bottom: 15px; }
+    .ship-item, .crew-item, .event-item { background: rgba(255,255,255,0.1); padding: 8px; margin: 5px 0; border-left: 3px solid #d4af37; border-radius: 3px; font-size: 12px; }
+    .button-group { display: flex; gap: 5px; margin-top: 10px; }
+    button { padding: 8px 12px; background: #d4af37; color: #000; border: none; border-radius: 3px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #e5c158; }
+    .login-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); color: #d4af37; padding: 30px; border-radius: 10px; text-align: center; z-index: 2000; }
+    .login-panel input { display: block; margin: 10px auto; padding: 10px; width: 250px; }
+    .status-bar { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.85); color: #d4af37; padding: 10px; border-radius: 5px; z-index: 500; font-size: 12px; }
+    .error { color: #ff6b6b; }
+    .success { color: #51cf66; }
+    .info { color: #4dabf7; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  
+  <!-- Login Panel -->
+  <div id="loginPanel" class="login-panel">
+    <h2>One Piece World Game</h2>
+    <p>Enter your username</p>
+    <input type="text" id="usernameInput" placeholder="Username" />
+    <div class="button-group">
+      <button onclick="loginPlayer()">Login</button>
+      <button onclick="createNewPlayer()">Create Account</button>
+    </div>
+  </div>
+
+  <!-- Game Sidebar -->
+  <div id="sidebar" class="sidebar" style="display: none;">
+    <h3>⚓ Game State</h3>
+    
+    <div class="sidebar-section">
+      <h4>Your Fleet</h4>
+      <div id="shipsList"></div>
+      <button onclick="showMoveMenu()">Move Ship</button>
+    </div>
+
+    <div class="sidebar-section">
+      <h4>Crew Roster</h4>
+      <div id="crewList"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <h4>Territories</h4>
+      <div id="territoriesList"></div>
+      <button onclick="claimTerritoryMode()">Claim Territory</button>
+    </div>
+
+    <div class="sidebar-section">
+      <h4>Recent Events</h4>
+      <div id="eventsList" style="max-height: 150px; overflow-y: auto;"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <button onclick="refreshGameState()" style="width: 100%;">Refresh</button>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div id="status">Connecting...</div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="JavaScript/leaflet.js"></script>
+  <script src="JavaScript/leaflet.label.js"></script>
+  <script src="JavaScript/L.Control.MousePosition.js"></script>
+  <script src="JavaScript/markerplayer-src.js"></script>
+
+  <script>
+    // Global state
+    let map, players = {}, currentPlayerId = null, currentPlayerState = null;
+    let mapState = null, selectedShip = null, moveMode = false, claimMode = false;
+    const API_URL = 'http://localhost:3000';
+
+    // Initialize map
+    function initMap() {
+      map = L.map('map').setView([0, 0], 5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      map.on('click', (e) => {
+        if (moveMode) {
+          handleMoveClick(e);
+        } else if (claimMode) {
+          handleClaimClick(e);
+        }
+      });
+    }
+
+    // Login/Create player
+    async function loginPlayer() {
+      const username = document.getElementById('usernameInput').value;
+      if (!username) {
+        updateStatus('Enter a username', 'error');
+        return;
+      }
+
+      try {
+        // Try to find existing player (simplified - in production, would use auth)
+        const res = await fetch(`${API_URL}/api/game/player/${username}`);
+        if (res.ok) {
+          const data = await res.json();
+          currentPlayerId = data.player.id;
+          startGame();
+          return;
+        }
+      } catch (err) {
+        console.log('Player not found, creating new...');
+      }
+
+      // Create new player if not found
+      await createNewPlayer();
+    }
+
+    async function createNewPlayer() {
+      const username = document.getElementById('usernameInput').value;
+      if (!username) {
+        updateStatus('Enter a username', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/api/game/player`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        const data = await res.json();
+        currentPlayerId = data.player.id;
+        updateStatus(`Welcome, ${username}!`, 'success');
+        startGame();
+      } catch (err) {
+        updateStatus(`Error: ${err.message}`, 'error');
+      }
+    }
+
+    // Start game
+    async function startGame() {
+      document.getElementById('loginPanel').style.display = 'none';
+      document.getElementById('sidebar').style.display = 'block';
+      await refreshGameState();
+      setInterval(refreshGameState, 5000); // Refresh every 5 seconds
+    }
+
+    // Refresh game state
+    async function refreshGameState() {
+      try {
+        // Fetch map state
+        const mapRes = await fetch(`${API_URL}/api/map/state`);
+        mapState = await mapRes.json();
+
+        // Fetch player state
+        const playerRes = await fetch(`${API_URL}/api/game/player/${currentPlayerId}`);
+        currentPlayerState = await playerRes.json();
+
+        // Fetch events
+        const eventsRes = await fetch(`${API_URL}/api/game/events`);
+        const events = await eventsRes.json();
+
+        renderMap();
+        updateSidebar();
+        displayEvents(events);
+        updateStatus('Game state updated', 'info');
+      } catch (err) {
+        updateStatus(`Error: ${err.message}`, 'error');
+      }
+    }
+
+    // Render map
+    function renderMap() {
+      // Clear existing layers
+      map.eachLayer((layer) => {
+        if (layer instanceof L.Marker || layer instanceof L.Polygon || layer instanceof L.Circle) {
+          map.removeLayer(layer);
+        }
+      });
+
+      if (!mapState || !mapState.nodes) return;
+
+      // Render nodes
+      mapState.nodes.forEach(node => {
+        const lat = (Math.random() - 0.5) * 40;
+        const lng = (Math.random() - 0.5) * 80;
+
+        // Check if node has territories
+        const territory = mapState.territories.find(t => t.node_id === node.id);
+        const color = territory ? '#d4af37' : '#4dabf7';
+
+        L.circleMarker([lat, lng], {
+          radius: 8,
+          color: color,
+          fill: true,
+          fillColor: color,
+          fillOpacity: 0.7,
+          weight: 2
+        })
+          .bindPopup(`<b>${node.name}</b><br>Region: ${node.region}<br>Type: ${node.type}`)
+          .addTo(map);
+
+        // Label
+        L.marker([lat, lng], {
+          icon: L.divIcon({
+            html: `<div style="font-size:10px;color:#fff;font-weight:bold;text-shadow:1px 1px 2px #000;">${node.name}</div>`,
+            iconSize: [50, 20],
+            className: 'node-label'
+          })
+        }).addTo(map);
+      });
+
+      // Render ships
+      if (mapState.ships) {
+        mapState.ships.forEach(ship => {
+          const node = mapState.nodes.find(n => n.id === ship.node_id);
+          if (node) {
+            const lat = (Math.random() - 0.5) * 40;
+            const lng = (Math.random() - 0.5) * 80;
+            L.marker([lat, lng], {
+              icon: L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                iconSize: [25, 41]
+              })
+            })
+              .bindPopup(`Ship ${ship.id}<br>Player: ${ship.player_id}<br>Hull: ${ship.hull}`)
+              .addTo(map);
+          }
+        });
+      }
+    }
+
+    // Update sidebar
+    function updateSidebar() {
+      if (!currentPlayerState) return;
+
+      // Ships
+      const shipsList = document.getElementById('shipsList');
+      shipsList.innerHTML = currentPlayerState.ships.map(ship => `
+        <div class="ship-item" onclick="selectShip('${ship.id}')">
+          Ship ${ship.id.substring(0, 8)}... (Hull: ${ship.hull})
+        </div>
+      `).join('');
+
+      // Crew
+      const crewList = document.getElementById('crewList');
+      crewList.innerHTML = currentPlayerState.crew.map(c => `
+        <div class="crew-item">${c.name} ${c.is_unique ? '⭐' : ''}</div>
+      `).join('');
+
+      // Territories
+      const terrList = document.getElementById('territoriesList');
+      terrList.innerHTML = currentPlayerState.territories.length > 0
+        ? currentPlayerState.territories.map(t => `<div class="crew-item">Territory at node ${t.node_id}</div>`).join('')
+        : '<div class="crew-item">No territories</div>';
+    }
+
+    // Display events
+    function displayEvents(events) {
+      const eventsList = document.getElementById('eventsList');
+      eventsList.innerHTML = events.slice(0, 10).map(event => `
+        <div class="event-item"><b>${event.type}</b><br>${new Date(event.created_at).toLocaleTimeString()}</div>
+      `).join('');
+    }
+
+    // Ship movement
+    function selectShip(shipId) {
+      selectedShip = shipId;
+      updateStatus(`Selected ship: ${shipId.substring(0, 8)}...`, 'info');
+    }
+
+    function showMoveMenu() {
+      if (!selectedShip) {
+        updateStatus('Select a ship first', 'error');
+        return;
+      }
+      moveMode = true;
+      updateStatus('Click on map to move ship', 'info');
+    }
+
+    async function handleMoveClick(e) {
+      moveMode = false;
+      // In production, would calculate actual node from click coordinates
+      const nodeId = mapState.nodes[Math.floor(Math.random() * mapState.nodes.length)].id;
+
+      try {
+        const res = await fetch(`${API_URL}/api/game/move`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            playerId: currentPlayerId,
+            shipId: selectedShip,
+            targetNodeId: nodeId
+          })
+        });
+        if (res.ok) {
+          updateStatus('Ship moved successfully!', 'success');
+          await refreshGameState();
+        }
+      } catch (err) {
+        updateStatus(`Move failed: ${err.message}`, 'error');
+      }
+    }
+
+    // Territory claiming
+    function claimTerritoryMode() {
+      if (!selectedShip) {
+        updateStatus('Select a ship first', 'error');
+        return;
+      }
+      claimMode = true;
+      updateStatus('Click to claim territory', 'info');
+    }
+
+    async function handleClaimClick(e) {
+      claimMode = false;
+      try {
+        const res = await fetch(`${API_URL}/api/game/claim-territory`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            playerId: currentPlayerId,
+            shipId: selectedShip
+          })
+        });
+        if (res.ok) {
+          updateStatus('Territory claimed!', 'success');
+          await refreshGameState();
+        }
+      } catch (err) {
+        updateStatus(`Claim failed: ${err.message}`, 'error');
+      }
+    }
+
+    // Status updates
+    function updateStatus(msg, type) {
+      const statusEl = document.getElementById('status');
+      statusEl.innerHTML = msg;
+      statusEl.className = type;
+    }
+
+    // Initialize
+    initMap();
+    updateStatus('Ready to login', 'info');
+  </script>
+</body>
+</html>

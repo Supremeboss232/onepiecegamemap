@@ -1,0 +1,2986 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>One Piece Interactive Map By the Library of Ohara</title>
+    <meta charset="UTF-8">
+    <meta name = "description" content = "Explore the most detailed and accurate interactive One Piece world map ever created. Click on every island, sea, and location from Oda’s universe and discover deep lore, timelines, and hidden details from the Grand Line to the New World by Library of Ohara">
+    <meta http-equiv="imagetoolbar" content="no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" href="/favicon.ico">
+    <script src="./js/leaflet.js" type="text/javascript"></script>
+    <script src="./js/L.Control.Window.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/leaflet.label.js"></script>
+    <script src="./js/L.Control.MousePosition.js" type="text/javascript"></script>
+    <script src="./js/leaflet-search.js" type="text/javascript"></script>
+    <script src="./js/leaflet-sidepanel.min.js" type="text/javascript"></script>
+    <script src="./js/Leaflet.Marker.SlideTo.js" type="text/javascript"></script>
+    <script src="./js/markerplayer-src.js" type="text/javascript"></script>
+    <script src="./js/ActiveLayers.js" type="text/javascript"></script>
+    <script src="./js/Leaflet.Control.Custom.js" type="text/javascript"></script>
+    <script src="js/searchData.js"></script>
+  </head>
+ 
+  <body>
+    <div id="map">
+    </div>
+    <input type="checkbox" name="navi" id="navi">
+    <label for="navi" class="btn navi"><span></span></label>
+    <button id="backBtn"  class="icon icon-arrow-left">Back to previous map</button >
+
+    
+  <script>
+ const navi = document.getElementById('navi');
+
+  navi.addEventListener('change', () => {
+    document.body.classList.toggle('navi-open', navi.checked);
+  });
+          
+    //////////////////////MAP BASE SETTING/////////////////////////////////
+          var mapExtent = [0, 0, 50000, 50000];
+          var mapMinZoom = 1;
+          var mapMaxZoom = 7;
+          var mapMaxResolution = 2.00000000;
+          var mapMinResolution = Math.pow(2, mapMaxZoom) * mapMaxResolution;
+          var tileExtent = [0.00000000, 0, 50000, 50000];
+          var crs = L.CRS.Simple;
+          crs.transformation = new L.Transformation(1, -tileExtent[0], -1, tileExtent[3]);
+          crs.scale = function(zoom) {
+            return Math.pow(2, zoom) / mapMinResolution;
+          };
+          var bounds = [[0,0], [50000,50000]];
+          crs.zoom = function(scale) {
+            return Math.log(scale * mapMinResolution) / Math.LN2;
+          };
+          var layer;
+
+
+
+
+
+    //////////////////////ADD MAPS/////////////////////////////////
+          var blueworld =  L.tileLayer('Blueworld/{z}/{x}/{y}.png', {
+              minZoom: 1, 
+              maxZoom: 7,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var waterSevenMap =  L.tileLayer('water-7/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var punkHazardMap =  L.tileLayer('Punk-Hazard/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var zouMap =  L.tileLayer('Zou/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var wciMap =  L.tileLayer('wci-map/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var wanoMap =  L.tileLayer('Wano/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var onigashimaMap =  L.tileLayer('Onigashima/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var eggheadMap =  L.tileLayer('Egghead/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 4,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+            var spaceWorld =  L.tileLayer('Space/{z}/{x}/{y}.png', {
+              minZoom: 0, 
+              maxZoom: 6,
+              tileSize: L.point(512, 512),
+              noWrap: true,
+              tms: false
+            });
+          var map = new L.Map('map', {
+              crs: crs,
+              layers: [blueworld, spaceWorld, wciMap, eggheadMap, wanoMap, onigashimaMap, zouMap, punkHazardMap, waterSevenMap]
+            });
+            map.fitBounds([
+              crs.unproject(L.point(mapExtent[2], mapExtent[3])),
+              crs.unproject(L.point(mapExtent[0], mapExtent[1]))
+            ]);
+            L.control.mousePosition().addTo(map);
+
+    //////////////////////ADD ID'S FOR MAPS/////////////////////////////////
+          
+            var blueID = blueworld.getContainer();
+            var spaceID = spaceWorld.getContainer();
+            var wciID = wciMap.getContainer();
+            var eggheadID = eggheadMap.getContainer();
+            var wanoID = wanoMap.getContainer();
+            var onigashimaID = onigashimaMap.getContainer();
+            var zouID = zouMap.getContainer();
+            var punkHazardID = punkHazardMap.getContainer();
+            var waterSevenID = waterSevenMap.getContainer();
+
+
+            blueID.classList.add('blueworld-layer');
+            spaceWorld.getContainer().classList.add('spaceWorld-layer');
+            wciID.classList.add('wciMap-layer');
+            eggheadID.classList.add('eggheadMap-layer');
+            wanoID.classList.add('wanoMap-layer');
+            onigashimaID.classList.add('onigashimaMap-layer');
+            punkHazardID.classList.add('punkHazardMap-layer');
+            waterSevenID.classList.add('waterSevenMap-layer');
+
+
+            blueID.setAttribute('id', 'blueworld-id');
+            spaceWorld.getContainer().setAttribute('id', 'spaceWorld-id');
+            wciID.setAttribute('id', 'wciMap-id');
+            eggheadID.setAttribute('id', 'eggheadMap-id');
+            wanoID.setAttribute('id', 'wanoMap-id');
+            onigashimaID.setAttribute('id', 'onigashimaMap-id');
+            zouID.setAttribute('id', 'zouMap-id');
+            punkHazardID.setAttribute('id', 'punkHazardMap-id');
+            waterSevenID.setAttribute('id', 'waterSevenMap-id');
+
+            const geojsonMarkerOptions = {
+              html: " ",
+              fillColor: "transparent",
+              weight: 1,
+              opacity: 0,
+              fillOpacity: 0,
+              radius: "20"
+          };
+          
+
+    //////////////////////CREATE MARKER AND POPUPS FOR BLUEWORLD/////////////////////////////////
+    var geojsonMini = L.geoJson(dataMini, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+          .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+        },
+        pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, geojsonMarkerOptions);
+        },
+    });
+    var geojsonTiny = L.geoJson(dataTiny, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+          .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+        },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    
+    
+    var geojsonNoExistTiny = L.geoJson(dataNoExistTiny, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+          .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+           permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+        },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    
+    
+    var geojsonSmall = L.geoJson(dataSmall, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+          .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    var geojsonMiddle = L.geoJson(dataMiddle, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7 justify-center"><figure class="content-bg"><img src=./' + feature.properties.Image + ' class=' + feature.properties.Id + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+  
+    var geojsonNoExist = L.geoJson(dataNoExist, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+  
+  
+    var geojsonBig = L.geoJson(dataBig, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+          .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    var geojsonGiant = L.geoJson(dataGiant, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+            {
+                permanent: true, 
+                direction: 'center',
+                interactive: true
+            });
+            
+      
+          },
+          pointToLayer: function (feature, latlng) {
+              return L.circleMarker(latlng, geojsonMarkerOptions);
+          },
+        });
+        map.on('zoomend', function (e) {
+      // Check zoom level
+      if (map.getZoom() < 4) {
+      } 
+    });  
+    var geojsonHuge = L.geoJson(dataHuge, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+
+
+    var geojsonUnkown = L.geoJson(dataUnkown, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7 justify-center"><figure class="content-bg"><img src=./' + feature.properties.Image + ' class=' + feature.properties.Id + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+
+
+    var geojsonUnkownTiny = L.geoJson(dataUnkownTiny, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7 justify-center"><figure class="content-bg"><img src=./' + feature.properties.Image + ' class=' + feature.properties.Id + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+
+
+    //////////////////////CREATE SPECIAL MARKER AND POPUPS/////////////////////////////////
+    var geojsonSpecialOnigashima = L.geoJson(dataSpecialOnigashima, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/onigashimamap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });     
+
+    var geojsonSpecialWorld = L.geoJson(dataSpecialWorld, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/space.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });    
+
+    var geojsonSpecialArabasta = L.geoJson(dataSpecialArabasta, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/alabastamap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    var geojsonSpecialSkypea = L.geoJson(dataSpecialSkypea, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/skypiea.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    var geojsonSpecialThrillerbark = L.geoJson(dataSpecialThrillerbark, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/thrillerbark.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });
+    var geojsonSpecialWCI = L.geoJson(dataSpecialWCI, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/wcimap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });      
+    var geojsonSpecialWano= L.geoJson(dataSpecialWano, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/wanomap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    }); 
+    var geojsonSpecialZou = L.geoJson(dataSpecialZou, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/zoumap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });      
+    var geojsonSpecialEgghead = L.geoJson(dataSpecialEgghead, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/eggheadmap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });        
+    var geojsonSpecialWaterSeven = L.geoJson(dataSpecialWaterSeven, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/water7map.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });          
+    var geojsonSpecialDrum = L.geoJson(dataSpecialDrum, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/drum.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });           
+    var geojsonSpecialImpeldown = L.geoJson(dataSpecialImpeldown, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/impeldown.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });               
+    var geojsonSpecialMarineford = L.geoJson(dataSpecialMarineford, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/marineford.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });    
+        var geojsonSpecialMarygeoise = L.geoJson(dataSpecialMarygeoise, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/mary-geoise.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    }); 
+    var geojsonSpecialPunkHazard = L.geoJson(dataSpecialPunkHazard, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/punkhazardmap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });    
+    var geojsonSpecialEnieslobby = L.geoJson(dataSpecialEnieslobby, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/enieslobbymap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });    
+    var geojsonSpecialSabaody = L.geoJson(dataSpecialSabaody, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/sabaodymap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });  
+    var geojsonSpecialDressrosa = L.geoJson(dataSpecialDressrosa, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/dressrosamap.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });    
+    var geojsonSpecialFishman = L.geoJson(dataSpecialFishman, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/fishman-island.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });     
+    var geojsonSpecialElbaph = L.geoJson(dataSpecialElbaph, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          window.location.href = "/elbaph.html";
+        }).bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });     
+
+
+
+
+
+    //////////////////////CREATE PORNEGLYPH MARKER AND POPUPS/////////////////////////////////
+    
+
+    var geojsonPorneglyph = L.geoJson(dataPorneglyph, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner '+ feature.properties.Class +'"><div class="row"><div class="col small-12 large-12"><figure class="porneglyph-img"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-12"><div class="text-container porneglyph-text"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<span class="label ' + feature.properties.Class + '">'+ feature.properties.Label + '</span>', 
+        {
+            permanent: true, 
+            direction: 'center',
+            interactive: true
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });  
+    map.on('zoomend', function () {
+      const zoom = map.getZoom();
+      const el = map.getContainer();
+
+      el.classList.remove('zoom-1','zoom-2','zoom-3','zoom-4','zoom-5','zoom-6');
+      el.classList.add('zoom-' + zoom);
+    });
+
+    //////////////////////CREATE MARKER AND POPUPS FOR Route/////////////////////////////////
+    var geojsonRouteImage = L.geoJson(dataRouteImage, {
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function (event) {
+          console.log(event);
+          var win =  L.control.window(map,{title:feature.properties.Name ,maxWidth:1920,modal: true})
+                  .content('<div class="content-inner"><div class="row"><div class="col small-12 large-7"><figure class="content-bg"><img src=./' + feature.properties.Image + '></figure></div><div class="col small-12 large-5"><div class="text-container"><h2>' + feature.properties.Name + '<span class="jap-name">' + feature.properties.japName + '</span><span class="location">' + feature.properties.location + '</span></h2><div class="text-inner">' + feature.properties.Description + '</div></div></div></div></div>')
+                  .show([1,1])
+          // --- MAP-BEWEGUNG & ZOOM DEAKTIVIEREN ---
+          map.scrollWheelZoom.disable();
+          map.dragging.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+
+          // --- SCROLLBLOCKER FÜR FIREFOX ---
+          const scrollBlocker = (e) => {
+            // Scroll zulassen, wenn im Fenster selbst
+            if (e.target.closest('.content-inner')) return;
+            e.preventDefault();
+          };
+          window.addEventListener('wheel', scrollBlocker, { passive: false });
+
+          // --- ESC zum Schließen ---
+          const escCloseHandler = (e) => {
+            if (e.key === "Escape") win.hide();
+          };
+          document.addEventListener("keydown", escCloseHandler);
+
+          // --- WENN FENSTER GESCHLOSSEN WIRD ---
+          win.on('hide', function () {
+            map.scrollWheelZoom.enable();
+            map.dragging.enable();
+            map.doubleClickZoom.enable();
+            map.touchZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            window.removeEventListener('wheel', scrollBlocker);
+            document.removeEventListener("keydown", escCloseHandler);
+          });
+        })
+        .bindTooltip('<img src="' + feature.properties.Image + '"class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive">', 
+        {
+            permanent: true, 
+            direction: 'center',
+        });
+
+      },
+      pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    });          
+
+
+      
+
+    //////////////////////REMOVE ALL SUBMAPS AT START /////////////////////////////////
+    function filter(feature, layer) {
+      if (feature.properties) {
+        if (feature.properties.spaceMap === true) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+      return true;
+    }
+    map.removeLayer(spaceWorld);
+    map.removeLayer(wciMap);
+    map.removeLayer(eggheadMap);
+    map.removeLayer(wanoMap);
+    map.removeLayer(onigashimaMap);
+    map.removeLayer(zouMap);
+    map.removeLayer(waterSevenMap);
+    map.removeLayer(punkHazardMap);
+
+
+    //////////////////////LAYERCONTROL/////////////////////////////////
+
+          var blueLayer = L.featureGroup([blueworld, geojsonGiant,geojsonHuge, geojsonBig, geojsonSmall, geojsonMiddle, geojsonTiny, geojsonMini]);
+
+
+          var baseLayers = {
+            'blueworld': blueworld,
+            'waterSevenMap': waterSevenMap,
+            'punkHazardMap': punkHazardMap,
+            'zouMap': zouMap,
+            'wciMap': wciMap,
+            'wanoMap': wanoMap,
+            'onigashimaMap': onigashimaMap,
+            'eggheadMap': eggheadMap,
+            'spaceWorld': spaceWorld,
+          }
+          var overlayLayers = {
+          }
+          var control = L.control.activeLayers(baseLayers, overlayLayers , { 
+            collapsed: false,
+            autoZIndex: false,
+            position: 'topleft',
+            hideSingleBase: true,
+          })
+          control.addTo(map)
+
+          const radioInputs = document.querySelectorAll('.leaflet-control-layers-selector');
+          var activeLayer = control.getActiveBaseLayer().name;
+          radioInputs.forEach(input => {
+            const span = input.nextElementSibling;
+    
+            if (span) {
+              input.classList.add(span.innerHTML.trim());
+              span.classList.add(span.innerHTML.trim());
+            }
+          });
+
+          var blueWorldButton = document.querySelector(".blueworld");
+          var spaceWorldButton = document.querySelector(".spaceWorld");
+          var wciMapButton = document.querySelector(".wciMap");
+          var eggheadMapButton = document.querySelector(".eggheadMap");
+          var wanoMapButton = document.querySelector(".wanoMap");
+          var onigashimaMapButton = document.querySelector(".onigashimaMap");
+          var zouMapButton = document.querySelector(".zouMap");
+          var waterSevenMapButton = document.querySelector(".waterSevenMap");
+          var punkHazardMapButton = document.querySelector(".punkHazardMap");
+          wciMapButton.id = 'wciMap';
+
+
+
+
+
+    //////////////////////BLUEWORLD ADD LOCATIONS/////////////////////////////////
+            map.on('zoomend', function() {
+                if (map.getZoom() <7 || (blueWorldButton.checked === false)){
+                  var activeLayer = control.getActiveBaseLayer().name;
+                  console.log(activeLayer)
+                  map.removeLayer(geojsonMini);
+                }
+                  else if (blueWorldButton.checked === true) {
+                      map.addLayer(geojsonMini);
+                  }
+              
+              });  
+
+            map.on('zoomend', function() {
+                if (map.getZoom() <5 || (blueWorldButton.checked === false)){
+                  var activeLayer = control.getActiveBaseLayer().name;
+                  console.log(activeLayer)
+                  map.removeLayer(geojsonSmall);
+                }
+                  else if (blueWorldButton.checked === true) {
+                      map.addLayer(geojsonSmall);
+                  }
+              
+              });
+            map.on('zoomend', function() {
+                  var activeLayer = control.getActiveBaseLayer().name;
+                  console.log(activeLayer)
+                if ((map.getZoom() <6) || (blueWorldButton.checked === false) ){
+                    map.removeLayer(geojsonTiny);
+                  }
+                  else if (blueWorldButton.checked === true) {
+                        map.addLayer(geojsonTiny);
+                    }
+                }
+              );   
+            map.on('zoomend', function() {
+                  var activeLayer = control.getActiveBaseLayer().name;
+                  console.log(activeLayer)
+                if ((map.getZoom() <6)){
+                    map.removeLayer(geojsonUnkownTiny);
+                  }
+                  else if (blueWorldButton.checked === true) {
+                        map.addLayer(geojsonUnkownTiny);
+                    }
+                }
+              );
+              map.on('zoomend', function() {
+                  var activeLayer = control.getActiveBaseLayer().name;
+                  console.log(activeLayer)
+                if ((map.getZoom() <6) || (blueWorldButton.checked === false) ){
+                    map.removeLayer(geojsonNoExistTiny);
+                  }
+                  else if (blueWorldButton.checked === true) {
+                        map.addLayer(geojsonNoExistTiny);
+                    }
+                }
+              );
+            map.on('zoomend', function() {
+              if (map.getZoom() <5 || (blueWorldButton.checked === false) ){
+                var activeLayer = control.getActiveBaseLayer().name;
+                map.removeLayer(geojsonMiddle);
+              }
+              else if (blueWorldButton.checked === true) {
+                      map.addLayer(geojsonMiddle);
+                  }
+            
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <5 || (blueWorldButton.checked === false) ){
+                var activeLayer = control.getActiveBaseLayer().name;
+                map.removeLayer(geojsonNoExist);
+              }
+              else if (blueWorldButton.checked === true) {
+                      map.addLayer(geojsonNoExist);
+                  }
+            
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <4 || (blueWorldButton.checked === false)){
+                      map.removeLayer(geojsonBig);
+              }
+              else if (blueWorldButton.checked === true) {
+                      map.addLayer(geojsonBig);
+                  }
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <3 ){
+                      map.removeLayer(geojsonGiant);
+              }
+              else  {
+                      map.addLayer(geojsonGiant);
+                  }
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <2 || (blueWorldButton.checked === false)){
+                      map.removeLayer(geojsonHuge);
+              }
+              else if (blueWorldButton.checked === true) {
+                      map.addLayer(geojsonHuge);
+                  }
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <7){
+                map.removeLayer(geojsonSpecialWCI);
+              }
+              else {
+                      map.addLayer(geojsonSpecialWCI);
+              }
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialOnigashima);
+              }
+              else {
+                      map.addLayer(geojsonSpecialOnigashima);
+              }
+          });        
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialWano);
+              }
+              else {
+                      map.addLayer(geojsonSpecialWano);
+              }
+          });
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialEgghead);
+              }
+              else {
+                      map.addLayer(geojsonSpecialEgghead);
+              }
+          });
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialZou);
+              }
+              else {
+                      map.addLayer(geojsonSpecialZou);
+              }
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialPunkHazard);
+              }
+              else {
+                      map.addLayer(geojsonSpecialPunkHazard);
+              }
+          });
+            map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialImpeldown);
+              }
+              else {
+                      map.addLayer(geojsonSpecialImpeldown);
+              }
+          });
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialWaterSeven);
+              }
+              else {
+                      map.addLayer(geojsonSpecialWaterSeven);
+              }
+          });         map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialDrum);
+              }
+              else {
+                      map.addLayer(geojsonSpecialDrum);
+              }
+          });      
+          map.on('zoomend', function() {
+              if (map.getZoom() <2){
+                map.removeLayer(geojsonSpecialWorld);
+              }
+              else {
+                      map.addLayer(geojsonSpecialWorld);
+              }
+          });     
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialEnieslobby);
+              }
+              else {
+                      map.addLayer(geojsonSpecialEnieslobby);
+              }
+          });      
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialSabaody);
+              }
+              else {
+                      map.addLayer(geojsonSpecialSabaody);
+              }
+          });  
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialDressrosa);
+              }
+              else {
+                      map.addLayer(geojsonSpecialDressrosa);
+              }
+          });  
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialElbaph);
+              }
+              else {
+                      map.addLayer(geojsonSpecialElbaph);
+              }
+          });  
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialArabasta);
+              }
+              else {
+                      map.addLayer(geojsonSpecialArabasta);
+              }
+          });  
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialSkypea);
+              }
+              else {
+                      map.addLayer(geojsonSpecialSkypea);
+              }
+          });    
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialThrillerbark);
+              }
+              else {
+                      map.addLayer(geojsonSpecialThrillerbark);
+              }
+          });      
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialMarineford);
+              }
+              else {
+                      map.addLayer(geojsonSpecialMarineford);
+              }
+          });  
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialMarygeoise);
+              }
+              else {
+                      map.addLayer(geojsonSpecialMarygeoise);
+              }
+          });  
+          map.on('zoomend', function() {
+              if (map.getZoom() <6){
+                map.removeLayer(geojsonSpecialFishman);
+              }
+              else {
+                      map.addLayer(geojsonSpecialFishman);
+              }
+          });  
+
+
+
+          
+    //////////////////////REMOVE LOCATION WITH MAPSWITCH/////////////////////////////////
+        var buttonArea = document.querySelector(".leaflet-control-layers-base");
+        
+        buttonArea.addEventListener("click", (event) => {
+          map.setView([8525, 67072], 0)
+              if (button.checked !== true) {
+                map.removeLayer(geojsonSmallSpace);
+                map.removeLayer(geojsonMiddleSpace);
+                map.removeLayer(geojsonHugeSpace); 
+            }
+            if (button.checked === true) {
+                map.removeLayer(geojsonMini);
+                map.removeLayer(geojsonTiny);
+                map.removeLayer(geojsonSmall);
+                map.removeLayer(geojsonMiddle);
+                map.removeLayer(geojsonHuge);
+                map.removeLayer(geojsonGiant);
+                map.removeLayer(geojsonBig);
+            }
+
+        });
+            
+        
+    // create a red polyline from an array of LatLng points
+    var shLatlngs1 = [
+        [37442 , 64030],
+        [36984 , 64030],
+        [36486, 62960],
+        [36654, 62314],
+        [36344, 61812],
+        [37296, 60836],
+        [38160, 60904],
+        [34236, 57532],
+        [33920, 58008],
+        [33106, 57940],
+        [32272, 55600],
+        [32244, 53116],
+        [29880, 49872],
+        [30252, 48192],
+        [37536, 48972],
+        [28604, 39314],
+        [27804, 37588],
+        [28212, 36584],
+        [25728, 34720],
+        [25472, 34740],
+        [25380, 37528],
+    ];
+    var shLatlngs2 = [
+        [25380, 38002],
+        [25358, 38514],
+        [25410, 38608],
+        [25456, 38580],
+        [25430, 38498],
+        [25352, 38572],
+        [25202, 38950],
+        [25046, 38862],
+        [25006, 39230],
+        [25186, 40528],
+        [25246, 40676],
+        [25414, 40684],
+        [25208, 42172],
+        [24768, 43028],
+        [24868, 42892],
+        [25172, 42972],
+        [24928, 45416],
+        [25110, 49652],
+        [25342, 49744],
+        [25230, 49618],
+        [25448, 49642],
+        [25534, 49598],
+        [25678, 49612],
+        [25722, 49582],
+        [25770, 49614],
+    ];
+    var shLatlngs3 = [
+        [25230, 49618],
+        [25194, 49588],
+        [25152, 49778],
+        [25296, 50229],
+        [25888, 50366],
+        [26081, 51179],
+        [25431, 52610],
+        [25736, 52530],
+        [25750, 53182],
+        [25620, 53104],
+        [25424, 53270],
+        [24774, 53240],
+        [24756, 53470],
+        [25965, 53510],
+    ];
+    var shLatlngs4 = [
+        [26066, 53532],
+        [26104, 53540],
+        [26088, 53948],
+        [26094, 54104],
+        [26082, 54262],
+        [26144, 54244],
+        [26172, 54166],
+        [26274, 54140],
+        [26482, 54152],
+    ];
+    var shLatlngs5 = [
+        [26828, 54222],
+        [26828, 54222],
+        [26874, 54232],
+        [26874, 54232],
+        [26990, 54646],
+        [27084, 54730],
+        [27118, 54768],
+        [27158, 54780],
+        [27218, 54786],
+        [27268, 54798],
+        [27382, 54796],
+        [27438, 54822],
+        [27464, 54854],
+        [27486, 54892],
+        [27520, 54970],
+        [27506, 55122],
+        [27284, 55348],
+        [27064, 56108],
+        [27060, 56920],
+        [26790, 57176],
+        [26694, 57344],
+        [25726, 57302],
+        [25508, 57244],
+        [25576, 58552],
+        [25488, 59704],
+        [25088, 61204],
+        [25488, 61330],
+        [25544, 61108],
+        [25670, 61010],
+        [25846, 60648],
+    ];
+    var shLatlngs6 = [
+        [26064, 61550],
+        [26006, 62096],
+        [25570, 62472],
+        [25388, 62786],
+        [25310, 65158],
+        [25405, 66477],
+        [24950, 67166],
+        [24988, 68304],
+        [25196, 68706],
+        [25370, 68444],
+        [25438, 68116],
+        [25422, 68190],
+        [24672, 68732],
+        [22860, 68956],
+        [21908, 70546],
+        [23348, 70022],
+        [22184, 69666],
+        [23200, 71724],
+    ];
+    var shLatlngs7 = [
+        [23708, 748],
+        [24784, 2924],
+        [25327, 3890],
+        [25725, 3891],
+        [25915, 3757],
+        [26118, 3920],
+        [26164, 4192],
+        [26054, 4164],
+        [26164, 4217],
+        [26056, 4276],
+        [24720, 6160],
+        [24614, 6556],
+        [25025, 6778],
+        [24296, 11576],
+        [23844, 13996],
+        [24268, 16608],
+        [24470, 17648],
+        [24324, 16606],
+        [25420, 16008],
+        [25856, 17732],
+        [26272, 19156],
+        [26310, 20402],
+        [26564, 20642],
+        [26828, 20852],
+        [26824, 21118],
+        [26750, 20974],
+        [26624, 20950],
+        [26651, 20877],
+        [26624, 20950],
+        [26432, 20600],
+        [26222, 20604],
+        [25930, 20488],
+        [25512, 21818],
+        [24462, 21844],
+        [25294, 23444],
+    ];
+
+
+    //////////////////////SEARCH BAR/////////////////////////////////
+const input = document.querySelector('input[type="text"]');
+        const searchControl = new L.Control.Search({
+            layer: L.featureGroup([geojsonGiant, geojsonHuge, geojsonMiddle, geojsonSmall, geojsonTiny, geojsonMini, geojsonUnkown, geojsonUnkownTiny, geojsonSpecialWCI, geojsonSpecialOnigashima, geojsonSpecialWano, geojsonSpecialWaterSeven, geojsonSpecialZou, geojsonSpecialSkypea, geojsonSpecialEgghead, geojsonSpecialPunkHazard, geojsonSpecialWorld, geojsonSpecialEnieslobby, geojsonSpecialSabaody, geojsonSpecialFishman, geojsonSpecialMarygeoise, geojsonSpecialDressrosa, geojsonSpecialElbaph, geojsonSpecialDrum, geojsonSpecialImpeldown, geojsonSpecialThrillerbark,geojsonSpecialMarineford, geojsonSpecialArabasta]),
+            propertyName: 'Name',
+            collapsed: false,
+            textErr: 'This Island never existed',
+            marker: false,
+            zoom: 6,
+            hideMarkerOnCollapse: true,
+            icon: false,
+            firstTipSubmit: true,
+          });
+searchControl.on('search:search', function(e) {
+    const value = e.text.trim();
+
+    const result = globalSearchData.find(item =>
+        item.name.toLowerCase() === value.toLowerCase()
+    );
+
+    if (result) {
+        const currentPage = window.location.pathname.split("/").pop();
+
+        if (result.map !== currentPage) {
+            window.location.href = "./" + result.map + "?search=" + encodeURIComponent(result.name);
+        }
+    }
+}); 
+          
+       
+          map.addControl(searchControl);
+
+
+searchControl.on('search:search', function(e) {
+    console.log("SUCHTEXT:", e.text);
+}); 
+    //////////////////////WORK IN PROGRESS/////////////////////////////////
+                          
+        var LawCora = L.icon({
+            iconUrl: './images/merry.jpeg',
+            iconSize:     [30, 20], // size of the icon
+            shadowSize:   [50, 64], // size of the shadow
+            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+
+        
+        blueworld.on('remove', function() {
+              console.log('blueworld wurde von der Karte entfernt.');
+              var activeLayer = control.getActiveBaseLayer().name;
+              console.log(activeLayer)
+        });
+        spaceWorld.on('remove', function() {
+              console.log('spaceWorld wurde von der Karte entfernt.');
+              var activeLayer = control.getActiveBaseLayer().name;
+              console.log(activeLayer)
+        });
+        wciMap.on('remove', function() {
+              console.log('wciMap wurde von der Karte entfernt.');
+              var activeLayer = control.getActiveBaseLayer().name;
+              console.log(activeLayer)
+        });
+
+      
+            
+    //////////////////////CONTROL HUB/////////////////////////////////
+    var controlBtn = document.querySelectorAll(".leaflet-control-layers");
+    document.querySelectorAll(".leaflet-control-layers").onclick = function() {console.log("Hi")} ;
+
+
+    L.control.custom({
+        position: 'topleft',
+        content : '<div class="button-container"><button type="button" id="maps" class="btn btn-default" title="Map Selection">'+
+                  '    <i class="fa fa-crosshairs"></i>'+
+                  '</button></div>'+
+                  '<div class="button-container"><button type="button" id="routes" class="btn btn-info" title="Map Settings">'+
+                  '    <i class="fa fa-compass"></i>'+
+                  '</button></div>'+
+                  '<div class="button-container"><button type="button" id="library" class="btn btn-primary" title="Go to the Mainpage">'+
+                  '    <i class="fa fa-spinner fa-pulse fa-fw"></i>'+
+                  '</button></div>',
+        classes : 'btn-group-horizontal btn-group-sm',
+        style   :
+        {
+            margin: '10px',
+            padding: '0px 0 0 0',
+            cursor: 'pointer',
+        },
+        datas   :
+        {
+            'foo': 'bar',
+        },
+        events:
+        {
+            click: function(data)
+            {
+                console.log('wrapper div element clicked');
+                console.log(data);
+            },
+            dblclick: function(data)
+            {
+                console.log('wrapper div element dblclicked');
+                console.log(data);
+            },
+            contextmenu: function(data)
+            {
+                console.log('wrapper div element contextmenu');
+                console.log(data);
+            },
+        }
+    }).addTo(map);
+    L.control.custom({
+        position: 'topleft',
+        content : '<div class="route-buttons"><input class="route-btn lawCora"  id="lawCora" type="checkbox" name="lawCora"><label class="lawCora" for="lawCora">Poneglyph Locations</label><input type="checkbox" name="strawhatRoute" id="strawhatRoute" class="route-btn strawhats"><label class="strawhats" for="strawhatRoute">Straw Hat Route</label><input class="route-btn unkown"  id="unkown" type="checkbox" name="unkown"><label class="unkown" for="unkown">Turn off unkown Locations</label></div>',
+        classes : 'routen',
+        style   :
+        {
+            margin: '10px',
+            padding: '0px 0 0 0',
+            cursor: 'pointer',
+        },
+        datas   :
+        {
+            'foo': 'bar',
+        },
+    }).addTo(map);
+    L.control.custom({
+        position: 'topleft',
+        content : '<div class="map-buttons"><a href="index.html" class="blueWorld"></a><a href="space.html" class="spaceWorld"></a><a href="drum.html" class="drumMap"></a><a href="alabastamap.html" class="alabastaMap"></a><a href="skypiea.html" class="skypeaMap"></a><a href="water7map.html" class="watersevenWorld"></a><a href="enieslobbymap.html" class="enieslobbyMap"></a><a href="thrillerbark.html" class="thrillerbarkMap"></a><a href="sabaodymap.html" class="sabaodyMap"></a><a href="impeldown.html" class="impeldownMap"></a><a href="marineford.html" class="marinefordMap"></a><a href="fishman-island.html" class="fishmenMap"></a><a href="punkhazardmap.html" class="punkhazardWorld"></a><a href="dressrosamap.html" class="dressrosamap"></a><a href="zoumap.html" class="zouWorld"></a><a href="wcimap.html" class="wciWorld"></a><a href="wanomap.html" class="wanoWorld"></a><a href="onigashimamap.html" class="onigashimaWorld"></a><a href="eggheadmap.html" class="eggheadWorld"></a><a href="elbaph.html" class="elbaphMap"></a><a href="mary-geoise.html" class="marygeosieMap"></a></div>',
+        classes : 'map',
+        style   :
+        {
+            margin: '10px',
+            padding: '0px 0 0 0',
+            cursor: 'pointer',
+        },
+        datas   :
+        {
+            'foo': 'bar',
+        },
+    }).addTo(map);
+    L.control.custom({
+        position: 'topleft',
+        content : '<div class="social-list"><a href="https://thelibraryofohara.com/" class="mainpage social-link" target="_noblank">Visit the Library of Ohara</a><a href="https://www.youtube.com/thelibraryofohara" class="youtube social-link" target="_noblank">Visit my YouTube-Channel</a><a href="https://x.com/newworldartur" class="twitter social-link" target="_noblank">Visit my Twitter</a><a href="https://www.patreon.com/thelibraryofohara" class="patreon social-link" target="_noblank">Support me on Patreon</a></div>',
+        classes : 'library',
+        style   :
+        {
+            margin: '10px',
+            padding: '0px 0 0 0',
+            cursor: 'pointer',
+        },
+        datas   :
+        {
+            'foo': 'bar',
+        },
+    }).addTo(map);
+    var mapBtn = document.getElementById("maps");
+    var routeBtn = document.getElementById("routes");
+    var libraryBtn = document.getElementById("library");
+    var mapSwitch = document.querySelector('div.map');
+    var routeSwitch = document.querySelector('div.routen');
+    var librarySwitch = document.querySelector('div.library');
+
+    mapBtn.addEventListener( "click", function() {
+      mapSwitch.classList.add("active");
+      routeSwitch.classList.remove("active");
+      librarySwitch.classList.remove("active");
+    } );
+    routeBtn.addEventListener( "click", function() {
+      routeSwitch.classList.add("active");
+      mapSwitch.classList.remove("active");
+      librarySwitch.classList.remove("active");
+    } );
+    libraryBtn.addEventListener( "click", function() {
+      librarySwitch.classList.add("active");
+      routeSwitch.classList.remove("active");
+      mapSwitch.classList.remove("active");
+    } );
+      var checkbox = document.getElementById('lawCora');
+
+
+      checkbox.addEventListener('change', function () {
+        if (this.checked) {
+          map.addLayer(geojsonPorneglyph);
+        } else {
+          map.removeLayer(geojsonPorneglyph);
+        }
+      });
+
+    var shPolyline1 = L.polyline(shLatlngs1, {color: 'red'});
+    var shPolyline2 = L.polyline(shLatlngs2, {color: 'red'});
+    var shPolyline3 = L.polyline(shLatlngs3, {color: 'red'});
+    var shPolyline4 = L.polyline(shLatlngs4, {color: 'red'});
+    var shPolyline5 = L.polyline(shLatlngs5, {color: 'red'});
+    var shPolyline6 = L.polyline(shLatlngs6, {color: 'orange'});
+    var shPolyline7 = L.polyline(shLatlngs7, {color: 'orange'});
+    var activateStrawhatRoute = document.getElementById("strawhatRoute");
+    var activateUnkownLocations = document.getElementById("unkown");
+
+
+      activateStrawhatRoute.addEventListener( "click", function() {
+
+    } );
+      const blueWorldInput = document.querySelector('input.blueworld');
+      const waterSevenInput = document.querySelector('input.waterSevenMap');
+
+
+      var DawnIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/dawn-island-arc.png",
+              iconSize: [10 ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      
+      var newDawnmarker = L.marker([37216, 64472], {icon: Dawnic});
+      var Dawnic = new DawnIcon({iconSize: [10  ,10]});
+      
+      map.on('zoomend', function() {
+        var DawnactualZoom = map.getZoom();
+        var DawnnewSize = (30 * DawnactualZoom);
+
+        var DawnresizedIcon = new DawnIcon({iconSize: [DawnnewSize ,DawnnewSize ]});      
+        newDawnmarker.setIcon(DawnresizedIcon );
+      }); 
+
+      var GoatIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/goat-island.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var Goatic = new GoatIcon({iconSize: [10  ,10]});
+      var Goatmarker = L.marker([36412, 62264], {icon: Goatic});
+
+      map.on('zoomend', function() {
+        var GoatactualZoom = map.getZoom();
+        var GoatnewSize = (30 * GoatactualZoom);
+
+        var GoatresizedIcon = new GoatIcon({iconSize: [GoatnewSize ,GoatnewSize ]});      
+        Goatmarker.setIcon(GoatresizedIcon );
+      }); 
+
+
+
+      var ShellsIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/shells-town-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var Shellsic = new ShellsIcon({iconSize: [10  ,10]});
+      var Shellsmarker = L.marker([38208, 61312], {icon: Shellsic});
+
+      map.on('zoomend', function() {
+        var ShellsactualZoom = map.getZoom();
+        var ShellsnewSize = (30 * ShellsactualZoom);
+
+        var ShellsresizedIcon = new ShellsIcon({iconSize: [ShellsnewSize ,ShellsnewSize ]});      
+        Shellsmarker.setIcon(ShellsresizedIcon );
+      }); 
+
+      var OrganIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/organ-archipelago-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var Organic = new OrganIcon({iconSize: [10  ,10]});
+      var Organmarker = L.marker([34356, 58552], {icon: Organic});
+
+      map.on('zoomend', function() {
+        var OrganactualZoom = map.getZoom();
+        var OrgannewSize = (30 * OrganactualZoom);
+
+        var OrganresizedIcon = new OrganIcon({iconSize: [OrgannewSize ,OrgannewSize ]});      
+        Organmarker.setIcon(OrganresizedIcon );
+      }); 
+
+      var rareAnimalIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/rare-animal-island-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var rareAnimalic = new rareAnimalIcon({iconSize: [10  ,10]});
+      var rareAnimalmarker = L.marker([33180, 58408], {icon: rareAnimalic});
+
+      map.on('zoomend', function() {
+        var rareAnimalactualZoom = map.getZoom();
+        var rareAnimalnewSize = (30 * rareAnimalactualZoom);
+
+        var rareAnimalresizedIcon = new rareAnimalIcon({iconSize: [rareAnimalnewSize ,rareAnimalnewSize ]});      
+        rareAnimalmarker.setIcon(rareAnimalresizedIcon );
+      }); 
+
+      var geckoIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/gecko-archipelago-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var geckoic = new geckoIcon({iconSize: [10  ,10]});
+      var geckomarker = L.marker([32142, 53382], {icon: geckoic});
+
+      map.on('zoomend', function() {
+        var geckoactualZoom = map.getZoom();
+        var geckonewSize = (30 * geckoactualZoom);
+
+        var geckoresizedIcon = new geckoIcon({iconSize: [geckonewSize ,geckonewSize ]});      
+        geckomarker.setIcon(geckoresizedIcon );
+      }); 
+
+
+      var baratieIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/baratie-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var baratieic = new baratieIcon({iconSize: [10  ,10]});
+      var baratiemarker = L.marker([30040, 47944], {icon: baratieic});
+
+      map.on('zoomend', function() {
+        var baratieactualZoom = map.getZoom();
+        var baratienewSize = (30 * baratieactualZoom);
+
+        var baratieresizedIcon = new baratieIcon({iconSize: [baratienewSize ,baratienewSize ]});      
+        baratiemarker.setIcon(baratieresizedIcon );
+      }); 
+
+      var conomiIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/conomi-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var conomiic = new conomiIcon({iconSize: [10  ,10]});
+      var conomimarker = L.marker([37368, 49472], {icon: conomiic});
+
+      map.on('zoomend', function() {
+        var conomiactualZoom = map.getZoom();
+        var conominewSize = (30 * conomiactualZoom);
+
+        var conomiresizedIcon = new conomiIcon({iconSize: [conominewSize ,conominewSize ]});      
+        conomimarker.setIcon(conomiresizedIcon );
+      }); 
+
+      var loguetownIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/loguetown-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var loguetownic = new loguetownIcon({iconSize: [10  ,10]});
+      var loguetownmarker = L.marker([28392, 39556], {icon: loguetownic});
+
+      map.on('zoomend', function() {
+        var loguetownactualZoom = map.getZoom();
+        var loguetownnewSize = (30 * loguetownactualZoom);
+
+        var loguetownresizedIcon = new loguetownIcon({iconSize: [loguetownnewSize ,loguetownnewSize ]});      
+        loguetownmarker.setIcon(loguetownresizedIcon );
+      }); 
+
+
+      var reverseIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/reverse-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var reverseic = new reverseIcon({iconSize: [10  ,10]});
+      var reversemarker = L.marker([24992, 37400], {icon: reverseic});
+
+      map.on('zoomend', function() {
+        var reverseactualZoom = map.getZoom();
+        var reversenewSize = (30 * reverseactualZoom);
+
+        var reverseresizedIcon = new reverseIcon({iconSize: [reversenewSize ,reversenewSize ]});      
+        reversemarker.setIcon(reverseresizedIcon );
+      }); 
+      var sabotenIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/saboten-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var sabotenic = new sabotenIcon({iconSize: [10  ,10]});
+      var sabotenmarker = L.marker([24936, 38664], {icon: sabotenic});
+
+      map.on('zoomend', function() {
+        var sabotenactualZoom = map.getZoom();
+        var sabotennewSize = (30 * sabotenactualZoom);
+
+        var sabotenresizedIcon = new sabotenIcon({iconSize: [sabotennewSize ,sabotennewSize ]});      
+        sabotenmarker.setIcon(sabotenresizedIcon );
+      }); 
+      var gardenIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/garden-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var gardenic = new gardenIcon({iconSize: [10  ,10]});
+      var gardenmarker = L.marker([25304, 40700], {icon: gardenic});
+
+      map.on('zoomend', function() {
+        var gardenactualZoom = map.getZoom();
+        var gardennewSize = (30 * gardenactualZoom);
+
+        var gardenresizedIcon = new gardenIcon({iconSize: [gardennewSize ,gardennewSize ]});      
+        gardenmarker.setIcon(gardenresizedIcon );
+      }); 
+
+      var drumIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/drum-island-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var drumic = new drumIcon({iconSize: [10  ,10]});
+      var drummarker = L.marker([24716, 42412], {icon: drumic});
+
+      map.on('zoomend', function() {
+        var drumactualZoom = map.getZoom();
+        var drumnewSize = (30 * drumactualZoom);
+
+        var drumresizedIcon = new drumIcon({iconSize: [drumnewSize ,drumnewSize ]});      
+        drummarker.setIcon(drumresizedIcon );
+      }); 
+      var frankyIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/franky.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var frankyic = new frankyIcon({iconSize: [5  ,5]});
+      var frankymarker = L.marker([23932, 44576], {icon: frankyic});
+
+      map.on('zoomend', function() {
+        var frankyactualZoom = map.getZoom();
+        var frankynewSize = (10 * frankyactualZoom);
+
+        var frankyresizedIcon = new frankyIcon({iconSize: [frankynewSize ,frankynewSize ]});      
+        frankymarker.setIcon(frankyresizedIcon );
+      }); 
+      var ussoppIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/ussopp.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var ussoppic = new ussoppIcon({iconSize: [5  ,5]});
+      var ussoppmarker = L.marker([26800, 44756], {icon: ussoppic});
+
+      map.on('zoomend', function() {
+        var ussoppactualZoom = map.getZoom();
+        var ussoppnewSize = (10 * ussoppactualZoom);
+
+        var ussoppresizedIcon = new ussoppIcon({iconSize: [ussoppnewSize ,ussoppnewSize ]});      
+        ussoppmarker.setIcon(ussoppresizedIcon );
+      }); 
+      var brookIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/brook.png", 
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon', 
+          }
+      });
+      var brookic = new brookIcon({iconSize: [5  ,5]});
+      var brookmarker = L.marker([23584, 52406], {icon: brookic});
+
+      map.on('zoomend', function() {
+        var brookactualZoom = map.getZoom();
+        var brooknewSize = (10 * brookactualZoom);
+
+        var brookresizedIcon = new brookIcon({iconSize: [brooknewSize ,brooknewSize ]});      
+        brookmarker.setIcon(brookresizedIcon );
+      }); 
+      var alabastaIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/alabasta-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var alabastaic = new alabastaIcon({iconSize: [10  ,10]});
+      var alabastamarker = L.marker([25128, 49660], {icon: alabastaic});
+
+      map.on('zoomend', function() {
+        var alabastaactualZoom = map.getZoom();
+        var alabastanewSize = (30 * alabastaactualZoom);
+
+        var alabastaresizedIcon = new alabastaIcon({iconSize: [alabastanewSize ,alabastanewSize ]});      
+        alabastamarker.setIcon(alabastaresizedIcon );
+      }); 
+
+      var jayaIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/jaya-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var jayaic = new jayaIcon({iconSize: [10  ,10]});
+      var jayamarker = L.marker([25082, 52652], {icon: jayaic});
+
+      map.on('zoomend', function() {
+        var jayaactualZoom = map.getZoom();
+        var jayanewSize = (30 * jayaactualZoom);
+
+        var jayaresizedIcon = new jayaIcon({iconSize: [jayanewSize ,jayanewSize ]});      
+        jayamarker.setIcon(jayaresizedIcon );
+      }); 
+      var skypeaIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/skypea-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var skypeaic = new skypeaIcon({iconSize: [10  ,10]});
+      var skypeamarker = L.marker([29152, 55040], {icon: skypeaic});
+
+      map.on('zoomend', function() {
+        var skypeaactualZoom = map.getZoom();
+        var skypeanewSize = (30 * skypeaactualZoom);
+
+        var skypearesizedIcon = new skypeaIcon({iconSize: [skypeanewSize ,skypeanewSize ]});      
+        skypeamarker.setIcon(skypearesizedIcon );
+      }); 
+
+      var foxyIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/foxy-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var foxyic = new foxyIcon({iconSize: [10  ,10]});
+      var foxymarker = L.marker([25384, 59000], {icon: foxyic});
+
+      map.on('zoomend', function() {
+        var foxyactualZoom = map.getZoom();
+        var foxynewSize = (30 * foxyactualZoom);
+
+        var foxyresizedIcon = new foxyIcon({iconSize: [foxynewSize ,foxynewSize ]});      
+        foxymarker.setIcon(foxyresizedIcon );
+      }); 
+      var waterIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/water-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var wateric = new waterIcon({iconSize: [10  ,10]});
+      var watermarker = L.marker([25280, 61304], {icon: wateric});
+
+      map.on('zoomend', function() {
+        var wateractualZoom = map.getZoom();
+        var waternewSize = (30 * wateractualZoom);
+
+        var waterresizedIcon = new waterIcon({iconSize: [waternewSize ,waternewSize ]});      
+        watermarker.setIcon(waterresizedIcon );
+      }); 
+
+
+      var namiIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/nami.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var namiic = new namiIcon({iconSize: [5  ,5]});
+      var namimarker = L.marker([26868, 59688], {icon: namiic});
+
+      map.on('zoomend', function() {
+        var namiactualZoom = map.getZoom();
+        var naminewSize = (10 * namiactualZoom);
+
+        var namiresizedIcon = new namiIcon({iconSize: [naminewSize ,naminewSize ]});      
+        namimarker.setIcon(namiresizedIcon );
+      }); 
+      var sanjiIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/sanji.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var sanjiic = new sanjiIcon({iconSize: [5  ,5]});
+      var sanjimarker = L.marker([26716, 62264], {icon: sanjiic});
+
+      map.on('zoomend', function() {
+        var sanjiactualZoom = map.getZoom();
+        var sanjinewSize = (10 * sanjiactualZoom);
+
+        var sanjiresizedIcon = new sanjiIcon({iconSize: [sanjinewSize ,sanjinewSize ]});      
+        sanjimarker.setIcon(sanjiresizedIcon );
+      }); 
+      var luffyIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/luffy.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var luffyic = new luffyIcon({iconSize: [5  ,5]});
+      var luffymarker = L.marker([23458, 62826], {icon: luffyic});
+
+      map.on('zoomend', function() {
+        var luffyactualZoom = map.getZoom();
+        var luffynewSize = (10 * luffyactualZoom);
+
+        var luffyresizedIcon = new luffyIcon({iconSize: [luffynewSize ,luffynewSize ]});      
+        luffymarker.setIcon(luffyresizedIcon );
+      });  
+      var chopperIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/chopper.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var chopperic = new chopperIcon({iconSize: [5  ,5]});
+      var choppermarker = L.marker([19074, 60846], {icon: chopperic});
+
+      map.on('zoomend', function() {
+        var chopperactualZoom = map.getZoom();
+        var choppernewSize = (10 * chopperactualZoom);
+
+        var chopperresizedIcon = new chopperIcon({iconSize: [choppernewSize ,choppernewSize ]});      
+        choppermarker.setIcon(chopperresizedIcon );
+      });  
+      var zoroIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/zoro.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var zoroic = new zoroIcon({iconSize: [5  ,5]});
+      var zoromarker = L.marker([23284, 56438], {icon: zoroic});
+
+      map.on('zoomend', function() {
+        var zoroactualZoom = map.getZoom();
+        var zoronewSize = (10 * zoroactualZoom);
+
+        var zororesizedIcon = new zoroIcon({iconSize: [zoronewSize ,zoronewSize ]});      
+        zoromarker.setIcon(zororesizedIcon );
+      }); 
+
+        var robinIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/robin.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var robinic = new robinIcon({iconSize: [5  ,5]});
+      var robinmarker = L.marker([28300, 64900], {icon: robinic});
+
+      map.on('zoomend', function() {
+        var robinactualZoom = map.getZoom();
+        var robinnewSize = (10 * robinactualZoom);
+
+        var robinresizedIcon = new robinIcon({iconSize: [robinnewSize ,robinnewSize ]});      
+        robinmarker.setIcon(robinresizedIcon );
+      }); 
+
+
+      var thrillerIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/thriller-bark-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var thrilleric = new thrillerIcon({iconSize: [10  ,10]});
+      var thrillermarker = L.marker([26088, 64512], {icon: thrilleric});
+
+      map.on('zoomend', function() {
+        var thrilleractualZoom = map.getZoom();
+        var thrillernewSize = (30 * thrilleractualZoom);
+
+        var thrillerresizedIcon = new thrillerIcon({iconSize: [thrillernewSize ,thrillernewSize ]});      
+        thrillermarker.setIcon(thrillerresizedIcon );
+      }); 
+      var eniesIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/enies-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var eniesic = new eniesIcon({iconSize: [10  ,10]});
+      var eniesmarker = L.marker([24288, 63968], {icon: eniesic});
+
+      map.on('zoomend', function() {
+        var eniesactualZoom = map.getZoom();
+        var eniesnewSize = (30 * eniesactualZoom);
+
+        var eniesresizedIcon = new eniesIcon({iconSize: [eniesnewSize ,eniesnewSize ]});      
+        eniesmarker.setIcon(eniesresizedIcon );
+      }); 
+
+      var amazonIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/amazon-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var amazonic = new amazonIcon({iconSize: [10  ,10]});
+      var amazonmarker = L.marker([22848, 63180], {icon: amazonic});
+
+      map.on('zoomend', function() {
+        var amazonactualZoom = map.getZoom();
+        var amazonnewSize = (30 * amazonactualZoom);
+
+        var amazonresizedIcon = new amazonIcon({iconSize: [amazonnewSize ,amazonnewSize ]});      
+        amazonmarker.setIcon(amazonresizedIcon );
+      }); 
+
+      var impelIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/impel-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var impelic = new impelIcon({iconSize: [10  ,10]});
+      var impelmarker = L.marker([22500, 65328], {icon: impelic});
+
+      map.on('zoomend', function() {
+        var impelactualZoom = map.getZoom();
+        var impelnewSize = (30 * impelactualZoom);
+
+        var impelresizedIcon = new impelIcon({iconSize: [impelnewSize ,impelnewSize ]});      
+        impelmarker.setIcon(impelresizedIcon );
+      });  
+
+      var marineIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/marine-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var marineic = new marineIcon({iconSize: [10  ,10]});
+      var marinemarker = L.marker([24072, 67828], {icon: marineic});
+
+      map.on('zoomend', function() {
+        var marineactualZoom = map.getZoom();
+        var marinenewSize = (30 * marineactualZoom);
+
+        var marineresizedIcon = new marineIcon({iconSize: [marinenewSize ,marinenewSize ]});      
+        marinemarker.setIcon(marineresizedIcon );
+      }); 
+        
+
+      var sabaodyIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/sabaody-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var sabaodyic = new sabaodyIcon({iconSize: [10  ,10]});
+      var sabaodymarker = L.marker([26192, 67524], {icon: sabaodyic});
+
+      map.on('zoomend', function() {
+        var sabaodyactualZoom = map.getZoom();
+        var sabaodynewSize = (30 * sabaodyactualZoom);
+
+        var sabaodyresizedIcon = new sabaodyIcon({iconSize: [sabaodynewSize ,sabaodynewSize ]});      
+        sabaodymarker.setIcon(sabaodyresizedIcon );
+      }); 
+      var fishmenIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/fishmen-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var fishmenic = new fishmenIcon({iconSize: [10  ,10]});
+      var fishmenmarker = L.marker([21780, 69608], {icon: fishmenic});
+
+      map.on('zoomend', function() {
+        var fishmenactualZoom = map.getZoom();
+        var fishmennewSize = (30 * fishmenactualZoom);
+
+        var fishmenresizedIcon = new fishmenIcon({iconSize: [fishmennewSize ,fishmennewSize ]});      
+        fishmenmarker.setIcon(fishmenresizedIcon );
+      }); 
+      var punkIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/punk-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var punkic = new punkIcon({iconSize: [10  ,10]});
+      var punkmarker = L.marker([26728, 4072], {icon: punkic});
+
+      map.on('zoomend', function() {
+        var punkactualZoom = map.getZoom();
+        var punknewSize = (30 * punkactualZoom);
+
+        var punkresizedIcon = new punkIcon({iconSize: [punknewSize ,punknewSize ]});      
+        punkmarker.setIcon(punkresizedIcon );
+      }); 
+
+      var dressrosaIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/dressrosa-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var dressrosaic = new dressrosaIcon({iconSize: [10  ,10]});
+      var dressrosamarker = L.marker([24848, 6888], {icon: dressrosaic});
+
+      map.on('zoomend', function() {
+        var dressrosaactualZoom = map.getZoom();
+        var dressrosanewSize = (30 * dressrosaactualZoom);
+
+        var dressrosaresizedIcon = new dressrosaIcon({iconSize: [dressrosanewSize ,dressrosanewSize ]});      
+        dressrosamarker.setIcon(dressrosaresizedIcon );
+      }); 
+
+      var zouIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/zou-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var zouic = new zouIcon({iconSize: [10  ,10]});
+      var zoumarker = L.marker([25320, 13296], {icon: zouic});
+
+      map.on('zoomend', function() {
+        var zouactualZoom = map.getZoom();
+        var zounewSize = (30 * zouactualZoom);
+
+        var zouresizedIcon = new zouIcon({iconSize: [zounewSize ,zounewSize ]});      
+        zoumarker.setIcon(zouresizedIcon );
+      }); 
+      var wholecakeIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/wholecake-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var wholecakeic = new wholecakeIcon({iconSize: [10  ,10]});
+      var wholecakemarker = L.marker([23916, 17600], {icon: wholecakeic});
+
+      map.on('zoomend', function() {
+        var wholecakeactualZoom = map.getZoom();
+        var wholecakenewSize = (30 * wholecakeactualZoom);
+
+        var wholecakeresizedIcon = new wholecakeIcon({iconSize: [wholecakenewSize ,wholecakenewSize ]});      
+        wholecakemarker.setIcon(wholecakeresizedIcon );
+      }); 
+      var wanoIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/wano-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var wanoic = new wanoIcon({iconSize: [10  ,10]});
+      var wanomarker = L.marker([26840, 21512], {icon: wanoic});
+
+      map.on('zoomend', function() {
+        var wanoactualZoom = map.getZoom();
+        var wanonewSize = (30 * wanoactualZoom);
+
+        var wanoresizedIcon = new wanoIcon({iconSize: [wanonewSize ,wanonewSize ]});      
+        wanomarker.setIcon(wanoresizedIcon );
+      });  
+      var eggheadIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/egghead-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var eggheadic = new eggheadIcon({iconSize: [10  ,10]});
+      var eggheadmarker = L.marker([24216, 21092], {icon: eggheadic});
+
+      map.on('zoomend', function() {
+        var eggheadactualZoom = map.getZoom();
+        var eggheadnewSize = (30 * eggheadactualZoom);
+
+        var eggheadresizedIcon = new eggheadIcon({iconSize: [eggheadnewSize ,eggheadnewSize ]});      
+        eggheadmarker.setIcon(eggheadresizedIcon );
+      }); 
+
+      var elbafIcon= L.Icon.extend({
+        options: {
+              iconUrl: "images/routes/elbaf-arc.png",
+              iconSize: [10  ,10],
+              iconAnchor: [0, 0],
+              iconClass: 'icon'
+          }
+      });
+      var elbafic = new elbafIcon({iconSize: [10  ,10]});
+      var elbafmarker = L.marker([25176, 23692], {icon: elbafic});
+
+      map.on('zoomend', function() {
+        var elbafactualZoom = map.getZoom();
+        var elbafnewSize = (30 * elbafactualZoom);
+
+        var elbafresizedIcon = new elbafIcon({iconSize: [elbafnewSize ,elbafnewSize ]});      
+        elbafmarker.setIcon(elbafresizedIcon );
+      }); 
+
+    activateStrawhatRoute.addEventListener("click", (event) => {
+
+              if (activateStrawhatRoute.checked === true) {
+                map.addLayer(shPolyline1);
+                map.addLayer(shPolyline2);
+                map.addLayer(shPolyline3);
+                map.addLayer(shPolyline4);
+                map.addLayer(shPolyline5);
+                map.addLayer(shPolyline6);
+                map.addLayer(shPolyline7);
+                map.addLayer(newDawnmarker);
+                map.addLayer(elbafmarker);
+                map.addLayer(eggheadmarker);
+                map.addLayer(wanomarker);
+                map.addLayer(wholecakemarker);
+                map.addLayer(zoumarker);
+                map.addLayer(punkmarker);
+                map.addLayer(fishmenmarker);
+                map.addLayer(sabaodymarker);
+                map.addLayer(marinemarker);
+                map.addLayer(thrillermarker);
+                map.addLayer(eniesmarker);
+                map.addLayer(foxymarker);
+                map.addLayer(skypeamarker);
+                map.addLayer(jayamarker);
+                map.addLayer(alabastamarker);
+                map.addLayer(sabotenmarker);
+                map.addLayer(reversemarker);
+                map.addLayer(loguetownmarker);
+                map.addLayer(Organmarker);
+                map.addLayer(impelmarker);
+                map.addLayer(amazonmarker);
+                map.addLayer(luffymarker);
+                map.addLayer(robinmarker);
+                map.addLayer(choppermarker);
+                map.addLayer(zoromarker);
+                map.addLayer(frankymarker);
+                map.addLayer(namimarker);
+                map.addLayer(brookmarker);
+                map.addLayer(sanjimarker);
+                map.addLayer(ussoppmarker);
+                map.addLayer(baratiemarker);
+                map.addLayer(watermarker);
+                map.addLayer(drummarker);
+                map.addLayer(conomimarker);
+                map.addLayer(gardenmarker);
+                map.addLayer(geckomarker);
+                map.addLayer(Shellsmarker);
+                map.addLayer(Goatmarker);
+                map.addLayer(dressrosamarker);
+                map.addLayer(rareAnimalmarker);
+
+            }
+            if (activateStrawhatRoute.checked !== true) {
+                map.removeLayer(choppermarker);
+                map.removeLayer(zoromarker);
+                map.removeLayer(robinmarker);
+                map.removeLayer(shPolyline1);
+                map.removeLayer(shPolyline2);
+                map.removeLayer(shPolyline3);
+                map.removeLayer(shPolyline4);
+                map.removeLayer(shPolyline5);
+                map.removeLayer(shPolyline6);
+                map.removeLayer(shPolyline7);
+                map.removeLayer(newDawnmarker);
+                map.removeLayer(dressrosamarker);
+                map.removeLayer(elbafmarker);
+                map.removeLayer(eggheadmarker);
+                map.removeLayer(wanomarker);
+                map.removeLayer(wholecakemarker);
+                map.removeLayer(zoumarker);
+                map.removeLayer(punkmarker);
+                map.removeLayer(fishmenmarker);
+                map.removeLayer(sabaodymarker);
+                map.removeLayer(marinemarker);
+                map.removeLayer(thrillermarker);
+                map.removeLayer(eniesmarker);
+                map.removeLayer(foxymarker);
+                map.removeLayer(skypeamarker);
+                map.removeLayer(jayamarker);
+                map.removeLayer(alabastamarker);
+                map.removeLayer(sabotenmarker);
+                map.removeLayer(reversemarker);
+                map.removeLayer(loguetownmarker);
+                map.removeLayer(Organmarker);
+                map.removeLayer(impelmarker);
+                map.removeLayer(amazonmarker);
+                map.removeLayer(luffymarker);
+                map.removeLayer(frankymarker);
+                map.removeLayer(namimarker);
+                map.removeLayer(brookmarker);
+                map.removeLayer(sanjimarker);
+                map.removeLayer(ussoppmarker);
+                map.removeLayer(baratiemarker);
+                map.removeLayer(watermarker);
+                map.removeLayer(drummarker);
+                map.removeLayer(conomimarker);
+                map.removeLayer(gardenmarker);
+                map.removeLayer(geckomarker);
+                map.removeLayer(Shellsmarker);
+                map.removeLayer(Goatmarker);
+                map.removeLayer(Goatmarker);
+                map.removeLayer(rareAnimalmarker);
+            }
+        });
+
+
+activateUnkownLocations.addEventListener("change", updateUnknownLayer);
+map.on("zoomend", updateUnknownLayer);
+
+function updateUnknownLayer() {
+    const z = map.getZoom();
+    const enabled = activateUnkownLocations.checked === false;
+
+    // --- TINY ab Zoom 4 ---
+    if (enabled && z >= 6) {
+        if (!map.hasLayer(geojsonUnkownTiny)) {
+            map.addLayer(geojsonUnkownTiny);
+        }
+    } else {
+        if (map.hasLayer(geojsonUnkownTiny)) {
+            map.removeLayer(geojsonUnkownTiny);
+        }
+    }
+
+    // --- FULL ab Zoom 5 ---
+    if (enabled && z >= 5) {
+        if (!map.hasLayer(geojsonUnkown)) {
+            map.addLayer(geojsonUnkown);
+        }
+    } else {
+        if (map.hasLayer(geojsonUnkown)) {
+            map.removeLayer(geojsonUnkown);
+        }
+    }
+}
+
+// Wichtig: direkt einmal beim Laden ausführen
+updateUnknownLayer();
+
+    // zoom the map to the polyline
+    map.setView([25025, 40072], 1);
+    const prevButton = document.getElementById("backBtn");
+
+
+      function updatePrevButton() {
+        const hasHistory = window.history.length > 1;
+        const hasReferrer = document.referrer && !document.referrer.startsWith(window.location.href);
+
+        // Wenn keine History oder kein Referrer → Button ausblenden
+        if (!hasHistory || document.referrer === "" || document.referrer === window.location.href) {
+          prevButton.style.display = 'none';
+          return;
+        }
+
+        prevButton.style.display = 'flex';
+      }
+
+      // Beim Laden prüfen
+      window.addEventListener('DOMContentLoaded', updatePrevButton);
+
+      // Bei Navigation (zurück/vorwärts)
+      window.addEventListener('popstate', updatePrevButton);
+
+      // Bei SPA-artiger Navigation
+      const originalPushState = history.pushState;
+      const originalReplaceState = history.replaceState;
+
+      history.pushState = function (...args) {
+        originalPushState.apply(this, args);
+        updatePrevButton();
+      };
+
+      history.replaceState = function (...args) {
+        originalReplaceState.apply(this, args);
+        updatePrevButton();
+      };
+
+      // Klick-Event: zurück navigieren
+      prevButton.addEventListener('click', () => {
+        window.history.back();
+      });
+                map.removeLayer(geojsonMini);
+                map.removeLayer(geojsonTiny);
+                map.removeLayer(geojsonSmall);
+                map.removeLayer(geojsonMiddle);
+                map.removeLayer(geojsonHuge);
+                map.removeLayer(geojsonGiant);
+                map.removeLayer(geojsonBig);
+                map.removeLayer(geojsonSpecialWCI);
+                map.removeLayer(geojsonSpecialOnigashima);
+                map.removeLayer(geojsonSpecialWano);
+                map.removeLayer(geojsonSpecialWaterSeven);
+                map.removeLayer(geojsonSpecialZou);
+                map.removeLayer(geojsonSpecialSkypea);
+                map.removeLayer(geojsonSpecialEgghead);
+                map.removeLayer(geojsonSpecialPunkHazard);
+                map.removeLayer(geojsonSpecialWorld);
+                map.removeLayer(geojsonSpecialEnieslobby);
+                map.removeLayer(geojsonSpecialSabaody);
+                map.removeLayer(geojsonSpecialFishman);
+                map.removeLayer(geojsonSpecialMarygeoise);
+                map.removeLayer(geojsonSpecialDressrosa);
+                map.removeLayer(geojsonSpecialElbaph);
+                map.removeLayer(geojsonSpecialDrum);
+                map.removeLayer(geojsonSpecialImpeldown);
+                map.removeLayer(geojsonSpecialThrillerbark);
+                map.removeLayer(geojsonSpecialMarineford);
+                map.removeLayer(geojsonSpecialArabasta);
+
+
+                console.log(globalSearchData);
+
+         const params = new URLSearchParams(window.location.search);
+const searchQuery = params.get("search");
+
+if (searchQuery) {
+    window.addEventListener("load", () => {
+        setTimeout(() => {
+            searchControl.searchText(searchQuery);
+        }, 300);
+    });
+}
+document.addEventListener('DOMContentLoaded', function () {
+    const navi = document.querySelector('#navi');
+
+    if (!navi) return;
+
+    navi.addEventListener('change', function () {
+      document.body.classList.toggle('nav-open', navi.checked);
+    });
+  });
+  
+  </script>
+  </body>
+</html>

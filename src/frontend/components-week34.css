@@ -1,0 +1,543 @@
+
+/* ========================================
+   PONEGLYPH PANEL STYLES
+   ======================================== */
+
+.poneglyph-panel {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.poneglyph-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ffd700;
+}
+
+.poneglyph-panel .panel-header h3 {
+  color: #ffd700;
+  margin: 0;
+  font-size: 14px;
+}
+
+.discovered-count {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.discovered-count.unlocked {
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+}
+
+.discovery-btn {
+  width: 100%;
+  background: #ffd700;
+  color: #000;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.discovery-btn:hover:not(:disabled) {
+  background: #ffed4e;
+  box-shadow: 0 0 10px #ffd700;
+}
+
+.discovery-result {
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.discovery-result.success {
+  background: rgba(0, 255, 0, 0.1);
+  border-left: 3px solid #00ff00;
+  color: #00ff00;
+}
+
+.discovery-result.fail {
+  background: rgba(255, 0, 0, 0.1);
+  border-left: 3px solid #ff0000;
+  color: #ff6b6b;
+}
+
+.discovered-name {
+  color: #ffd700;
+  font-weight: bold;
+  margin: 4px 0 0 0;
+}
+
+.laugh-tale-unlock {
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid #ffd700;
+  padding: 8px;
+  border-radius: 4px;
+  text-align: center;
+  color: #ffd700;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.poneglyphs-list {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  padding: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.list-header {
+  color: #ccc;
+  font-size: 11px;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.poneglyph-item {
+  padding: 6px;
+  margin: 4px 0;
+  background: rgba(255, 215, 0, 0.05);
+  border-left: 2px solid #ffd700;
+  border-radius: 2px;
+  font-size: 11px;
+}
+
+.poneglyph-item.hidden {
+  background: rgba(100, 100, 100, 0.2);
+  border-left-color: #666;
+  color: #999;
+}
+
+.poneglyph-item .name {
+  display: block;
+  color: #ffd700;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.poneglyph-item .location {
+  display: block;
+  color: #b0b0b0;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+
+.poneglyph-item .lore {
+  display: block;
+  color: #a9a9a9;
+  font-size: 10px;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* ========================================
+   ALLIANCE PANEL STYLES
+   ======================================== */
+
+.alliance-panel {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.alliance-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ff6b6b;
+}
+
+.alliance-panel .panel-header h3 {
+  color: #ff6b6b;
+  margin: 0;
+  font-size: 14px;
+}
+
+.player-alliance {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.alliance-info {
+  margin-bottom: 8px;
+}
+
+.alliance-info h4 {
+  margin: 0 0 4px 0;
+  color: #ff9999;
+  font-size: 12px;
+}
+
+.alliance-info p {
+  margin: 2px 0;
+  color: #ccc;
+  font-size: 11px;
+}
+
+.members-list {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  padding: 6px;
+}
+
+.members-list h5 {
+  margin: 0 0 6px 0;
+  color: #ff9999;
+  font-size: 11px;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 1px solid #333;
+  font-size: 10px;
+  color: #ccc;
+}
+
+.member-item .name {
+  flex: 1;
+  color: #fff;
+  font-weight: bold;
+}
+
+.member-item .role {
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 9px;
+  margin: 0 4px;
+  text-transform: uppercase;
+}
+
+.member-item .role.leader {
+  background: #ffd700;
+  color: #000;
+}
+
+.member-item .role.commander {
+  background: #ff6b6b;
+  color: white;
+}
+
+.member-item .role.member {
+  background: #666;
+  color: #fff;
+}
+
+.member-item .bounty {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.no-alliance {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-alliance,
+.join-alliance {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.create-alliance h4,
+.join-alliance h4 {
+  margin: 0 0 6px 0;
+  color: #ff9999;
+  font-size: 12px;
+}
+
+.create-alliance input {
+  width: 100%;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #ff6b6b;
+  color: white;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.create-alliance button {
+  width: 100%;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.alliances-list {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.alliance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px;
+  margin: 4px 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  border-left: 2px solid #ff6b6b;
+}
+
+.alliance-item .alliance-info {
+  flex: 1;
+  margin: 0;
+}
+
+.alliance-item .name {
+  color: #fff;
+  font-weight: bold;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.alliance-item .members {
+  color: #999;
+  font-size: 10px;
+}
+
+.alliance-item .join-btn {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 10px;
+  margin-left: 8px;
+}
+
+/* ========================================
+   VIVRE CARD PANEL STYLES
+   ======================================== */
+
+.vivrecard-panel {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #9c27b0;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.vivrecard-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #9c27b0;
+}
+
+.vivrecard-panel .panel-header h3 {
+  color: #9c27b0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.card-count {
+  background: #9c27b0;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.cards-list {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.card-item {
+  padding: 6px;
+  margin: 4px 0;
+  background: rgba(156, 39, 176, 0.1);
+  border-left: 2px solid #9c27b0;
+  border-radius: 3px;
+}
+
+.card-item .card-info {
+  margin-bottom: 4px;
+}
+
+.card-item h5 {
+  margin: 0;
+  color: #ba68c8;
+  font-size: 11px;
+}
+
+.card-item .bounty {
+  color: #ffd700;
+  font-size: 10px;
+}
+
+.condition-bar {
+  height: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  font-size: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.condition-bar.healthy .condition-fill {
+  background: linear-gradient(90deg, #00ff00, #00dd00);
+}
+
+.condition-bar.warning .condition-fill {
+  background: linear-gradient(90deg, #ffaa00, #ff9900);
+}
+
+.condition-bar.danger .condition-fill {
+  background: linear-gradient(90deg, #ff5555, #ff3333);
+}
+
+.condition-bar.critical .condition-fill {
+  background: linear-gradient(90deg, #ff0000, #cc0000);
+}
+
+.condition-fill {
+  transition: width 0.3s ease;
+}
+
+.condition-text {
+  position: absolute;
+  left: 2px;
+  z-index: 1;
+  font-weight: bold;
+}
+
+/* ========================================
+   LEADERBOARD PANEL STYLES
+   ======================================== */
+
+.leaderboard-panel {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.leaderboard-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #4a90e2;
+}
+
+.leaderboard-panel .panel-header h3 {
+  color: #4a90e2;
+  margin: 0;
+  font-size: 14px;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  flex: 1;
+  min-width: 70px;
+  background: rgba(74, 144, 226, 0.2);
+  border: 1px solid #4a90e2;
+  color: #4a90e2;
+  padding: 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: #4a90e2;
+  color: white;
+}
+
+.tab-btn:hover {
+  background: #4a90e2;
+  color: white;
+}
+
+.rankings-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin: 4px 0;
+  background: rgba(74, 144, 226, 0.1);
+  border-left: 3px solid #4a90e2;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.ranking-item .rank {
+  font-size: 16px;
+  margin-right: 8px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.ranking-item .name {
+  flex: 1;
+  color: #fff;
+  font-weight: bold;
+}
+
+.ranking-item .value {
+  color: #ffd700;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  padding: 10px;
+}

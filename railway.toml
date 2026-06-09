@@ -1,0 +1,5 @@
+[build]
+builder = "dockerfile"
+
+[start]
+cmd = "node src/server.js"

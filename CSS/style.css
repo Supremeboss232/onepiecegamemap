@@ -1,0 +1,1904 @@
+@import url(leaflet.css);
+@import url(L.Control.MousePosition.css);
+@import url(MarkerCluster.css);
+@import url(L.Control.Window.css);
+@import url(leaflet.label.css);
+@import url(MarkerCluster.Default.css);
+@import url(leaflet-search.css);
+@import url(L.Control.MousePosition.css);
+@import url(flexgrid.css);
+@import url(modalGallery.css);
+@import url(leaflet-sidepanel.css);
+@import url(leaflet-routing-machine.css);
+
+
+@font-face {
+  font-family: Nobile;
+  font-weight: 700;
+  src: url(../fonts/Nobile-Bold.woff);
+}
+@font-face {
+  font-family: Nobile;
+  font-weight: 300;
+  src: url(../fonts/Nobile-Regular.ttf);
+}
+@font-face {
+  font-family: Georgia;
+  font-weight: 400;
+  src: url(../fonts/georgia.ttf);
+}
+@font-face {
+  font-family: Georgia;
+  font-weight: 700;
+  src: url(../fonts/georgiab.ttf);
+}
+@font-face {
+  font-family: Libre;
+  src: url(../fonts/LibreBaskerville-Bold.ttf);
+}
+@font-face {
+  font-family: Libre-italic;
+  src: url(../fonts/FreeSerifBoldItalic.ttf);
+}
+@font-face {
+  font-family: Icomoon;
+  src: url(../fonts/icomoon.woff);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #f2f2f2;
+}
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+#slider {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #BBE8EB;
+  position: relative;
+  z-index: 1;
+  width: auto;
+}
+
+.leaflet-popup-content {
+  width: auto !important;
+}
+
+.caption {
+  font-weight: 700;
+  font-family: Georgia;
+  color: #f2f2f2;
+  -webkit-text-stroke: 2px #2d2d2d;
+  font-size: 60px;
+  text-transform: uppercase;
+}
+
+.content-inner {
+  max-height: 100%;
+  height: 100%;
+}
+
+.content {
+  max-height: 90vh !important;
+  height: 100%;
+  padding-bottom: 30px;
+  padding-top: 45px;
+  padding-left: 18px;
+  padding-right: 18px;
+  background: url(../images/popup-bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow-y: scroll;
+}
+
+.content:has(.porneglyph) {
+  background: none;
+}
+.content-inner.porneglyph::before {
+  background: url(../images/stone-bg.jpg);
+  background-size: cover;
+  background-repeat: repeat;
+  position: absolute;
+  inset: 0;
+  opacity: .1;
+}
+.content-inner.porneglyph.red::before {
+  background: url(../images/poneglyph-red-bg.jpg);
+  background-size: cover;
+  position: absolute;
+  inset: 0;
+  opacity: .1;
+}
+.content-inner.porneglyph {
+  background: #587198;
+  max-height: 100% !important;
+}
+.content-inner.porneglyph.red {
+  background: #701212;
+}
+.rotate {
+  writing-mode: vertical-rl;
+}
+.content-inner > .row {
+  max-height: 100% !important;
+  height: 100%;
+}
+.content-inner {
+  max-height: 100% !important;
+  height: 100%;
+  position: relative;
+  max-height: 90vh !important;
+}
+.marygeoise.content-inner {
+    padding-inline: 50px;
+}
+.text-container {
+  height: 100%;
+  padding-bottom: 50px;
+}
+
+#button {
+  font-size: 12px;
+  padding: 10px 15px;
+  position: absolute;
+  top: 140px;
+  left: 14px;
+  z-index: 9999;
+  background-color: #7d9ec9;
+  color: #f2f2f2;
+  font-family: Georgia;
+  transition: all ease-in-out 0.3s;
+}
+
+#button:hover {
+  cursor: pointer;
+  background-color: #94b3db;
+}
+
+h2 {
+  font-size: clamp(20px, 4vw, 36px);
+  font-family: Georgia;
+  color: #000000;
+  margin-top: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: pre-wrap;
+  text-align: center;
+}
+body:has(.visible) {
+  overflow: hidden;
+}
+.content-bg {
+  height: 100%;
+  margin: 0;
+}
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+.content .gallery {
+  height: 920px;
+}
+
+.content-inner > img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: contain;
+  object-fit: contain;
+}
+.content-bg > img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: contain;
+  object-fit: contain;
+}
+.content-bg:has(.Czach-Kingdom), .content-bg:has(.eightieth-branch) {
+  max-height: 430px;
+}
+.text-inner {
+  font-size: 16px;
+  font-family: Arial;
+  color: #000;
+  font-weight: 700;
+}
+
+.text-inner > p:last-of-type {
+  margin-bottom: 0;
+}
+
+.control-window {
+  max-width: 100% !important;
+  transform: translate(-50%, -50%) !important;
+  top: 49%;
+  background: url(../images/wood.jpg);
+  background-position: center;
+  background-size: contain;
+  left: 50%;
+  transition: opacity ease-in-out 0.3s;
+  position: relative;
+  padding: 25px;
+}
+.control-window > .content:has(.porneglyph) {
+  padding: 0;
+}
+.control-window:has(.porneglyph){
+  background: none;
+  width: 1320px;
+  padding: 0;
+}
+.porneglyph-img {
+  width: 700px;
+  margin: 0 auto;
+}
+.porneglyph-img > img {
+    width: 100%;
+    height: 100%;
+}
+.porneglyph-text > h2, .porneglyph-text > .text-inner {
+    color: #0a111b ;
+}
+
+.span.label.porneglyph::before,
+.porneglyph-text {
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+.control-window:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: contain;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.0745098039);
+}
+
+.control-window  .content-inner:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: contain;
+}
+
+.control-window > .content {
+  position: relative;
+  padding: 18px 0;
+}
+
+.title {
+  display: none;
+}
+
+.titlebar {
+  position: absolute;
+  right: 0;
+}
+
+.leaflet-tooltip {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  text-align: center;
+}
+
+span.label {
+  font-family: Libre-italic;
+  color: #fff;
+  -webkit-text-stroke: 2.5px #1d1d1d;
+  white-space: nowrap;
+  text-align: center;
+
+}
+span.label.porneglyph {
+  font-family: Libre-italic;
+  color: #fff;
+  -webkit-text-stroke: 2.5px #1d1d1d;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 0;
+}
+span.label.porneglyph::before  {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-image: url(../images/Poneglyph_Icon.png);
+  background-size: contain;
+  transition: all ease-in-out .3s;
+}
+span.label.porneglyph.red::before  {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-image: url(../images/load-poneglyph.png);
+  background-size: contain;
+}
+a.label {
+  font-family: Libre-italic;
+  color: #fff;
+  -webkit-text-stroke: 2.5px #1d1d1d;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.leaflet-tooltip:hover > span.label.middle, .leaflet-tooltip:hover > a.label.middle {
+  font-size: 44px;
+}
+.leaflet-tooltip:hover > span.label.medium-giant {
+  font-size: 33px;
+}
+
+.leaflet-tooltip:hover > span.label.porneglyph::before {
+  width: 43px;
+  height: 43px;
+}
+.leaflet-tooltip:hover > span.label.tiny, .leaflet-tooltip:hover > a.label.tiny {
+  font-size: 39px;
+}
+.leaflet-tooltip:hover > span.label.tiny.sabaody, .leaflet-tooltip:hover > a.label.tiny {
+  font-size: 31px;
+}
+ .leaflet-tooltip:hover > span.label.thriller {
+  font-size: 59px;
+}
+ .leaflet-tooltip:hover > span.label.elbaph {
+  font-size: 29px;
+}
+ .leaflet-tooltip:hover > span.label.smallest {
+  font-size: 42px;
+}
+ .leaflet-tooltip:hover > span.label.giant {
+  font-size: 53px;
+}
+ .leaflet-tooltip:hover > span.label.giant span {
+  font-size: 35px;
+}
+ .leaflet-tooltip:hover > span.label.giant.mary {
+  font-size: 48px;
+}
+ .leaflet-tooltip:hover > span.label.giant.punkhazard {
+  font-size: 46px;
+}
+ .leaflet-tooltip:hover > span.label.biggest {
+  font-size: 47px;
+}
+ .leaflet-tooltip:hover > span.label.biggest span{
+  font-size: 33px;
+}
+.leaflet-tooltip:hover > span.label.mini, .leaflet-tooltip:hover > a.label.mini,  .leaflet-tooltip:hover > span.label.mini.wano {
+  font-size: 33px;
+}
+
+span.label.mini {
+  font-size: 29px;
+  line-height: 27px;
+  -webkit-text-stroke: 1.7px #1d1d1d;
+}
+a.label.mini {
+  font-size: 29px;
+  line-height: 27px;
+  -webkit-text-stroke: 1.7px #1d1d1d;
+}
+span.label.mini.wano {
+  font-size: 29px;
+  line-height: 27px;
+  -webkit-text-stroke: 1.9px #1d1d1d;
+}
+.leaflet-tooltip:has(.pornelglyph) {
+  padding: 0 !important;
+}
+span.label {
+  transition: all ease-in-out .3s !important
+}
+span.label.tiny {
+  font-size: 36px;
+  line-height: 39px;
+  -webkit-text-stroke: 1.7px #1d1d1d;
+}
+
+span.label.tiny.thriller{
+  font-size: 56px;
+  line-height: 39px;
+  -webkit-text-stroke: 2.9px #1d1d1d;
+}
+span.label.tiny.sabaody {
+  font-size: 28px;
+  line-height: 39px;
+}
+span.label.tiny.elbaph {
+  font-size: 25px;
+  line-height: 28px;
+  -webkit-text-stroke: 1.5px #1d1d1d;
+}
+a.label.tiny {
+  font-size: 36px;
+  line-height: 39px;
+  -webkit-text-stroke: 1.7px #1d1d1d;
+}
+
+span.label.smallest {
+  font-size: 39px;
+  line-height: 41px;
+  -webkit-text-stroke: 2px #1d1d1d;
+}
+
+.button-container {
+display: flex;
+height: calc(100% / 3);
+}
+.button-container > .btn {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+}
+span.label.middle {
+  font-size: 42px;
+  line-height: 45px;
+  -webkit-text-stroke: 2.3px #1d1d1d;
+  transition: all ease-in-out 0.3s;
+}
+
+span.label.biggest {
+  font-size: 44px;
+  line-height: 47px;
+}
+span.label.biggest span {
+  font-size: 30px;
+}
+
+span.label.giant {
+  font-size: 50px;
+  line-height: 60px;
+  font-family: Libre;
+}
+span.label.giant.punkHazard {
+  font-size: 45px;
+  line-height: 60px;
+  font-family: Libre;
+}
+span.label.giant.mary {
+  font-size: 45px;
+  line-height: 60px;
+  font-family: Libre;
+}
+span.label.giant.mary.left {
+  text-align: right;
+}
+.icon-arrow-left:before {
+  content: "";
+   background-image: url(../images/arrow-back.svg);
+    width: 23px;
+    display: inline-block;
+    height: 23px;
+}
+span.label.medium-giant {
+  font-size: 30px;
+  line-height: 40px;
+  -webkit-text-stroke: 1.5px #1d1d1d;
+  font-family: Libre;
+}
+span.label.giant span {
+  display: block;
+  font-size: 32px;
+  line-height: 40px;
+  -webkit-text-stroke: 1.6px #1d1d1d;
+  transition: all ease-in-out .3s;
+}
+span.label.biggest span {
+  transition: all ease-in-out .3s;
+}
+span.jap-name {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+span.location {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 40px;
+  opacity: .8;
+}
+#cntrl-wrap {
+  position: absolute;
+  top: 210px;
+  left: 10px;
+  width: 100%;
+  padding: 0.5rem 0;
+  z-index: 999999;
+}
+
+#cntrl-wrap .cntrl {
+  width: 25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: 2px solid rgba(183, 183, 183, 0.7019607843);
+  overflow: auto;
+}
+
+#cntrl-wrap .icon {
+  width: 100px;
+}
+
+#cntrl-wrap .cntrl .btn {
+  color: #1f77a2;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0.25rem 0.25rem;
+  background-color: rgba(93, 113, 219, 0.1803921569);
+}
+#backBtn {
+   position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #1f77a2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all ease-in-out .3s;
+}
+#mainBtn:hover {
+    background-color: #4ca0ca;
+    cursor: pointer;
+}
+#mainBtn {
+   position: fixed;
+    bottom: 70px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #1f77a2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    display: flex;
+    transition: all ease-in-out .3s;
+    text-decoration: none;
+}
+#backBtn:hover {
+    background-color: #4ca0ca;
+    cursor: pointer;
+}
+#mainBtn:after {
+    content: ""; 
+    background-image: url(../images/icons/Bluestar-icon.png);
+    width: 30px;
+    height: 30px;
+    background-position: center;
+    background-size: contain;
+    border-radius: 50%;
+}
+.btn-group-sm {
+  display: flex;
+  flex-direction: column;
+}
+.btn-group-sm .btn:before {
+  fill: white;
+}
+.btn {
+  background-color: #1f77a2;
+  padding: 10px 15px;
+  color: #f2f2f2;
+}
+
+.btn:hover {
+  background-color: #4ca0ca;
+  cursor: pointer;
+}
+
+.btn-group-horizontal.btn-group-sm.leaflet-control {
+  margin: 0px !important;
+  position: absolute;
+  left: 0;
+  top: 57px;
+  z-index: 99999;
+}
+
+.leaflet-control-basemapsSwitcher, .routen.leaflet-control, .leaflet-control-layers, .map.leaflet-control {
+  display: none;
+}
+
+.leaflet-control-basemapsSwitcher.active, .routen.leaflet-control.active, .leaflet-control-layers.active, .map.leaflet-control.active {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.btn.navi {
+  position: absolute;
+  top: 50%;
+  left: 36px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  transition: all ease-in-out 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#navi {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+label.navi {
+  border: 0px;
+  cursor: pointer;
+}
+
+label.navi:before {
+  content: "";
+  background-image: url(../images/logpose.png);
+  width: 50px;
+  height: 54px;
+  display: block;
+  background-size: cover;
+}
+body.nav-open .navi:before {
+  content: url(../images/arrow-back.svg);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 30px;
+  line-height: 20px;
+  padding: 5px;
+  background-image: none;
+  width: 20px;
+  height: 20px;
+  transform: translate(-7px, 0);
+}
+body.nav-open .leaflet-top.leaflet-left {
+  transform: translate(0, -50%);
+}
+
+
+.search-tip {
+  width: 100%;
+}
+
+
+.route-buttons {
+  font-family: Libre;
+  color: #fafafa;
+  text-decoration: none;
+  transition: all ease-in-out 0.3s;
+  width: 100%;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.routen {
+  font-family: Libre;
+  color: #fafafa;
+  text-decoration: none;
+  transition: all ease-in-out 0.3s;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  overflow-y: scroll; 
+  overflow-x: hidden; 
+}
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .library, .leaflet-touch .routen , .leaflet-touch .map {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+}
+.leaflet-control-layers {
+  font-family: Libre;
+  text-decoration: none;
+  position: absolute;
+  top: 16%;
+  left: 50%;
+  transform: translate(-35.9%);
+  transition: all ease-in-out 0.3s;
+  width: calc(100% - 126px);
+  height: 79%;
+}
+
+.routen {
+  font-family: Libre;
+  text-decoration: none;
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  transform: translate(-41.9%);
+  transition: all ease-in-out 0.3s;
+  width: calc(100% - 126px);
+  height: 80%;
+}
+.map {
+  font-family: Libre;
+  text-decoration: none;
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  transform: translate(-41.9%);
+  transition: all ease-in-out 0.3s;
+  width: calc(100% - 126px);
+  height: 80%;
+}
+.map-buttons a:before {
+  width: 70px;
+  height: 70px;
+}
+.library {
+ font-family: Libre;
+  text-decoration: none;
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  transform: translate(-41.9%);
+  transition: all ease-in-out 0.3s;
+  width: calc(100% - 126px);
+  height: 80%;
+  display: none;
+  overflow-y: scroll;
+}
+
+
+.library.active {
+  display: flex;
+}
+.social-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  align-items: stretch;
+  margin: 20px;
+  gap: 36px 0;
+}
+a.social-link {
+  font-family: Libre;
+  color: #fafafa;
+  text-decoration: none;
+  width: calc((100% / 2) - 18px);
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+  transition: all ease-in-out 0.3s;
+  gap: 10px;
+  height: auto;  font-size: 15px;
+  border: 2px solid rgba(0,0,0,0.2);
+  padding: 15px 20px;
+  border-radius: 10px;
+  background: linear-gradient(339deg,rgba(31, 119, 162, 1) 30%, rgba(40, 131, 177, 1) 70%, rgba(31, 119, 162, 01) 90%);
+}
+
+.social-link::before {
+  background-size: cover;
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 0;
+}
+a.social-link:hover {
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+.mainpage:before {
+  content: "";
+  background-image: url(../images/artur.jpg);
+  background-size: cover;
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto;
+
+}
+.youtube:before {
+  content: "";
+  background-image: url(../images/youtube.png);
+  background-size: cover;
+  display: block;
+  width: 80px;
+  height: 55px;
+  margin: 0 auto;
+    transform: scale(.7);
+}
+
+.patreon:before {
+    content: "";
+  background-image: url(../images/patreon.png);
+  background-size: cover;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  margin: 0 auto;
+    transform: scale(.6);
+}
+
+.twitter:before {
+  content: "";
+  background-image: url(../images/twitter.png);
+  background-size: cover;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  margin: 0 auto;
+    transform: scale(.6);
+}
+
+label.strawhats, label.lawCora, label.unkown {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: auto;
+  transition: all ease-in-out .3s;
+  font-size: 15px;
+  border: 2px solid rgba(0,0,0,0.2);
+  padding: 15px 20px;
+  background: linear-gradient(339deg,rgba(31, 119, 162, 1) 30%, rgba(40, 131, 177, 1) 70%, rgba(31, 119, 162, 01) 90%);
+  border-radius: 10px;
+  
+}
+label.strawhats:hover, label.lawCora:hover {
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+label.unkown:hover, label.launkownwCora:hover {
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+label.strawhats:before {
+  content: "";
+  background-image: url(../images/jolly.png);
+    width: 64px;
+    height: 64px;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+label.unkown:before {
+  content: "";
+  background-image: url(../images/Unknown_Locations_Icon.png);
+  width: 64px;
+  height: 64px;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+label.lawCora:before {
+  content: "";
+  background-image: url(../images/ponegylph.png);
+    width: 64px;
+    height: 64px;
+  display: block;
+  background-size: contain;
+  margin: 0 auto;
+  background-repeat: no-repeat;
+}
+#strawhatRoute:checked ~ label.strawhats {
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+#lawCora:checked ~ label.lawCora {
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+#unkown:checked ~ label.unkown {
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+.route-btn.strawhats {
+  display: none;
+}
+.route-btn.unkown {
+  display: none;
+}
+.route-btn.lawCora {
+  display: none;
+}
+
+.leaflet-marker-pane:has(img) img:before {
+  background-color: red;
+}
+.route-btn::before {
+   position: relative;
+}
+.route-btn:not(:last-of-type) {
+  margin-right: 20px;
+}
+
+.route-btn {
+  margin-right: 20px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.text-left {
+  text-align: left !important;
+  justify-content: flex-start;
+  display: flex;
+}
+.text-right {
+  text-align: right !important;
+  justify-content: flex-end;
+  display: flex;
+}
+
+.leaflet-control-layers-list {
+  height: 100%;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.leaflet-control-layers-base {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 19px;
+  overflow-y: scroll;
+}
+.map-buttons {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px 0;
+  align-items: stretch;
+  overflow-y: scroll;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.leaflet-control-layers-base label {
+  height: 100%;
+}
+
+.leaflet-control-layers-base label div {
+  height: 100%;
+}
+
+a.blueWorld:before {
+  content: "";
+  background-image: url(../images/icons/Bluestar-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.blueWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.punkhazardWorld:before {
+  content: "";
+  background-image: url(../images/icons/Punk-Hazard-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.punkhazardWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.punkhazardWorld:after {
+  content: "Punk Hazard";
+  font-size: 12px;
+  text-align: center;
+}
+a.skypeaMap:before {
+  content: "";
+  background-image: url(../images/icons/Skypiea-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.skypeaMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.skypeaMap:after {
+  content: "Skypiea";
+  font-size: 12px;
+  text-align: center;
+}
+a.marinefordMap:before {
+  content: "";
+  background-image: url(../images/icons/Marineford-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.marinefordMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.marinefordMap:after {
+  content: "Marineford";
+  font-size: 12px;
+  text-align: center;
+}
+a.enieslobbyMap:before {
+  content: "";
+  background-image: url(../images/icons/Enies-Lobby-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.enieslobbyMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.enieslobbyMap:after {
+  content: "Enies Lobby";
+  font-size: 12px;
+  text-align: center;
+}
+a.sabaodyMap:before {
+  content: "";
+  background-image: url(../images/icons/Sabaody-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.sabaodyMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.drumMap:before {
+  content: "";
+  background-image: url(../images/icons/Drum-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.drumMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.drumMap:after {
+  content: "Drum";
+  font-size: 12px;
+  text-align: center;
+}
+a.dressrosamap:before {
+  content: "";
+  background-image: url(../images/icons/Dress-Rosa-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.dressrosamap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.dressrosamap:after {
+  content: "Dress Rosa";
+  font-size: 12px;
+  text-align: center;
+}
+a.elbaphMap:before {
+  content: "";
+  background-image: url(../images/icons/Elbaph-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.elbaphMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+.map-buttons a {
+    width: calc((100% / 3) - 19px);
+    transition: all ease-in-out .3s;
+    background: linear-gradient(339deg,rgba(31, 119, 162, 1) 30%, rgba(40, 131, 177, 1) 70%, rgba(31, 119, 162, 01) 90%);
+}
+.map-buttons a:hover { 
+  background: #4ca0ca;
+  cursor: pointer;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+a.elbaphMap:after {
+  content: "Elbaph";
+  font-size: 12px;
+  text-align: center;
+}
+a.impeldownMap:before {
+  content: "";
+  background-image: url(../images/icons/Impel-Down-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.impeldownMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.impeldownMap:after {
+  content: "Impel Down";
+  font-size: 12px;
+  text-align: center;
+}
+a.marygeosieMap:before {
+  content: "";
+  background-image: url(../images/icons/Mary-Geoise-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.marygeosieMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.marygeosieMap:after {
+  content: "Mary Geoise";
+  font-size: 12px;
+  text-align: center;
+}
+a.fishmenMap:before {
+  content: "";
+  background-image: url(../images/icons/Fish-Man-Island-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.fishmenMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.fishmenMap:after {
+  content: "Fish-Man Island";
+  font-size: 12px;
+  text-align: center;
+}
+a.thrillerbarkMap:before {
+  content: "";
+  background-image: url(../images/icons/Thriller-Bark-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.thrillerbarkMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.thrillerbarkMap:after {
+  content: "Thriller Bark";
+  font-size: 12px;
+  text-align: center;
+}
+a.sabaodyMap:after {
+  content: "Sabaody Archipelago";
+  font-size: 12px;
+  text-align: center;
+}
+a.alabastaMap:before {
+  content: "";
+  background-image: url(../images/icons/Alabasta-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.alabastaMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.alabastaMap:after {
+  content: "Alabasta";
+  font-size: 12px;
+  text-align: center;
+}
+a.watersevenWorld:before {
+  content: "";
+  background-image: url(../images/icons/Water-Seven-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.watersevenWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.watersevenWorld:after {
+  content: "Water Seven";
+  font-size: 12px;
+  text-align: center;
+}
+a.blueWorld:after {
+  content: "Bluestar";
+  font-size: 12px;
+  text-align: center;
+}
+
+ a.spaceWorld:before {
+  content: "";
+  background-image: url(../images/icons/Space-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+ a.spaceWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.spaceWorld:after {
+  content: "Space";
+  font-size: 12px;
+  text-align: center;
+}
+a.wciWorld:before {
+  content: "";
+  background-image: url(../images/icons/Whole-Cake-Island-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.wciWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.wciWorld:after {
+  content: "Whole Cake Island";
+  font-size: 12px;
+  text-align: center;
+}
+a.eggheadWorld:before {
+  content: "";
+  background-image: url(../images/icons/Egghead-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.eggheadWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.eggheadWorld:after {
+  content: "Egghead";
+  font-size: 12px;
+  text-align: center;
+}
+a.wanoWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.wanoWorld:after {
+  content: "Wano Country";
+  font-size: 12px;
+  text-align: center;
+}
+a.wanoWorld:before {
+  content: "";
+  background-image: url(../images/icons/Wano-Country.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.onigashimaWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+a.onigashimaWorld:after {
+  content: "Onigashima";
+  font-size: 12px;
+  text-align: center;
+}
+a.onigashimaWorld:before {
+  content: "";
+  background-image: url(../images/icons/Onigashima-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.zouWorld:after {
+  content: "Zou";
+  font-size: 12px;
+  text-align: center;
+}
+a.zouWorld:before {
+  content: "";
+  background-image: url(../images/icons/Zou-icon.png);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+}
+a.zouWorld {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+.leaflet-control-layers-base > label span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.leaflet-control-layers-base > label {
+  height: auto;
+  width: calc((100% / 3) - 18px);
+}
+
+.leaflet-control-layers-selector {
+  display: none;
+}
+
+.leaflet-control-layers-selector ~ span {
+  font-size: 0;
+}
+
+.leaflet-control-layers-selector ~ span:before {
+  opacity: 0.7;
+  transition: opacity ease-in-out 0.3s;
+  border: 4px solid transparent;
+}
+
+.leaflet-control-layers-selector ~ span:hover:before {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.leaflet-control-layers-selector:checked ~ span {
+  font-size: 0;
+}
+
+.leaflet-control-layers-selector:checked ~ span:before {
+  opacity: 1;
+  border: 4px solid #44b7f0;
+  border-radius: 50%;
+  opacity: 1;
+}
+
+.btn {
+  border: 1px solid #235b77;
+}
+
+.btn-default:before {
+  content: url(../images/blueworld.svg);
+  display: block;
+    width: 70px;
+    height: 70px;
+}
+
+.btn-info:before {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 70px;
+  background-image: url(../images/logpose.svg);
+  background-size: contain;
+}
+
+.fa-spinner:before {
+  content: url(../images/artur.svg);
+  display: block;
+  width: 70px;
+  height: 70px;
+}
+
+
+.fa-times:before {
+  content: url(../images/sunny.svg);
+  display: block;
+  width: 70px;
+  height: 70px;
+}
+
+.fa-check:before {
+  content: url(../images/sunny.svg);
+  display: block;
+  width: 70px;
+  height: 70px;
+}
+
+.fa-exclamation-triangle:before {
+  content: url(../images/sunny.svg);
+  display: block;
+  width: 70px;
+  height: 70px;
+}
+.leaflet-control-basemapsSwitcher {
+  order: 1;
+  margin-top: 10px;
+  padding-left: 81px;
+  padding-right: 20px;
+}
+
+#navi:checked ~ label.navi {
+  left: 580px;
+}
+#navi:checked ~ label.navi:hover {
+  background-color: #94b3db;
+}
+
+.leaflet-control-search {
+  order: 0;
+}
+
+.leaflet-top.leaflet-left {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  background-color: #1f77a2;
+  transform: translate(-550px, -50%);
+  z-index: 9999;
+  transition: all ease-in-out 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 450px;
+  width: 550px;
+}
+.leaflet-top.leaflet-left:before {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  transform: translate(-10%);
+  background-size: cover;
+  background-image: url(../images/jolly.png);
+  opacity: 0.2;
+  mix-blend-mode: soft-light;
+}
+
+#cntrl-wrap .cntrl .prog-bar-wrap {
+  display: flex;
+  height: 5px;
+  width: 100%;
+  padding: 0 0.5rem;
+  overflow: auto;
+}
+
+#prog-bar {
+  background-color: #5197e8;
+  width: 0%;
+  border-radius: 5px;
+}
+
+#cntrl-wrap .cntrl .point-info {
+  color: #4d4d4d;
+  white-space: nowrap;
+  background-color: rgba(77, 127, 151, 0.1490196078);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+} /*# sourceMappingURL=style.css.map */
+
+
+@media screen and (max-width:759px) {
+  .leaflet-top.leaflet-left {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    background-color: #1f77a2;
+    transform: translate(0, 470px);
+    z-index: 9999;
+    transition: all ease-in-out 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 470px;
+    width: 100%;
+  }
+  .porneglyph-img {
+    width: 100%;
+  }
+  .leaflet-control:has(.porneglyph) {
+    max-width: 90% !important;
+  }
+  .porneglyph {
+    padding: 0 !important;
+  }
+  #navi:checked ~ .navi:before {
+    content: url(../images/arrow-back.svg);
+    transform: translate(-2px, 0) rotate(-90deg);
+  }
+
+  .leaflet-bottom.leaflet-left {
+    bottom: auto;
+    top: 0;
+  }
+  .leaflet-control-search input.search-input {
+    height: 33px;
+  }
+  .leaflet-control-layers {
+    width: calc(100% - 20px);
+    transform: translate(0);
+    left: 0;
+    margin: 0;
+    order: 999;
+    height: 323px;
+    margin-left: 10px;
+    margin-top: 10px;
+    position: static;
+  }
+  .routen {
+    width: calc(100% - 20px);
+    transform: translate(0);
+    left: 0;
+    margin: 0;
+    order: 999;
+    height: 323px;
+    margin-left: 10px;
+    margin-top: 10px;
+    position: static;
+  }
+  .map {
+    width: calc(100% - 20px);
+    transform: translate(0);
+    left: 0;
+    margin: 0;
+    order: 999;
+    height: 323px;
+    margin-left: 10px;
+    margin-top: 10px;
+    position: static;
+  }
+  .library {
+    width: calc(100% - 20px);
+    transform: translate(0);
+    left: 0;
+    margin: 0;
+    order: 999;
+    height: 323px;
+    margin-left: 10px;
+    margin-top: 10px;
+    position: static;
+  }
+  .map-buttons {
+    gap: 30px 0;
+    justify-content: space-between;
+  }
+  
+  .map-buttons a {
+      display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: calc((100% / 2) - 18px);
+    transition: all ease-in-out .3s;
+  }
+  .map-buttons a:after {
+      font-size: 12px;
+  }
+  
+label.strawhats, label.lawCora, label.unkown {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: auto;
+  transition: all ease-in-out .3s;
+  font-size: 14px;
+  border: 2px solid rgba(0,0,0,0.2);
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+label.strawhats:before {
+  width: 45px;
+  height: 45px;
+}
+label.unkown:before {
+  width: 45px;
+  height: 45px;
+}
+label.lawCora:before {
+  width: 45px;
+  height: 45px;
+}
+#backBtn {
+   font-size: 0;
+   gap: 0;
+    bottom: 100px;
+    left: 0px;
+    padding: 10px;
+}
+#mainBtn {
+   font-size: 0;
+   gap: 0;
+    bottom: 170px;
+    left: 0;
+    padding: 10px;
+}
+
+  .leaflet-top.leaflet-left:before {
+    transform: translate(-50%);
+         top: 50%;
+        width: 110px;
+        height: 110px;
+  }
+  .btn.navi {
+    top: auto;
+    left: 0;
+    transform: translateX(0);
+    bottom: 0;
+  }
+  #navi {
+    -webkit-appearance: checkbox;
+    cursor: pointer;  
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  #navi:checked ~ label.navi {
+    bottom: 470px;
+    left: 0;
+  }
+  #navi:checked ~ .navi:before {
+    font-size: 40px;
+    width: auto;
+    height: auto;
+    line-height: 25px;
+  }
+  #navi:checked ~ .leaflet-control-container > .leaflet-top.leaflet-left {
+    transform: translate(0, 0);
+  }
+  .btn-group-horizontal.btn-group-sm.leaflet-control {
+    position: static;
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+  }
+  .button-container {
+    display: flex;
+    height: 100px;
+    width: calc(100% / 3);
+  }
+  .button-container > .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .btn {
+    padding: 10px;
+  }
+  .btn:before {
+    width: 50px;
+    height: 50px;
+  }
+  .fa-default:before, .fa-info:before, .fa-spinner:before {
+    width: 50px;
+    height: 50px;
+  }
+}
+
