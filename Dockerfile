@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -8,6 +8,9 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm ci --only=production
+
+# Copy environment file
+COPY .env ./
 
 # Copy source code
 COPY src ./src
