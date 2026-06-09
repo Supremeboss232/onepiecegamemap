@@ -9,9 +9,6 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci --only=production
 
-# Copy environment file
-COPY .env ./
-
 # Copy source code
 COPY src ./src
 COPY db ./db
