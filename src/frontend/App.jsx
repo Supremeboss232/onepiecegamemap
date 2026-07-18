@@ -16,7 +16,7 @@ import { AlliancePanel } from './components/AlliancePanel';
 import { VivreCardPanel } from './components/VivreCardPanel';
 import { LeaderboardPanel } from './components/LeaderboardPanel';
 import { DavyBackFightUI } from './components/DavyBackFightUI';
-import { apiClient } from './api/apiClient';
+import { apiClient } from './services/apiClient';
 
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000';
 const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:3000';

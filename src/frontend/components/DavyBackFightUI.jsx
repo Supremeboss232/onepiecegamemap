@@ -4,7 +4,7 @@ import { DodgeballGame } from './DodgeballGame';
 import { BoxingGame } from './BoxingGame';
 import { BoatRaceGame } from './BoatRaceGame';
 import { TreasureHuntGame } from './TreasureHuntGame';
-import { apiClient } from '../api/apiClient';
+import { apiClient } from '../services/apiClient';
 
 export function DavyBackFightUI({ playerId, token, onTournamentEnd }) {
   const [tournamentActive, setTournamentActive] = useState(false);

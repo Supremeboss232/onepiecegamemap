@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { apiClient } from '../api/apiClient';
+import { apiClient } from '../services/apiClient';
 
 export function LeaderboardPanel({ playerId, token }) {
   const [tab, setTab] = useState('bounty'); // bounty, poneglyphs, alliances

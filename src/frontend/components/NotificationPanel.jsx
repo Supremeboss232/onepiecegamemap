@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { apiClient } from '../api/apiClient';
+import { apiClient } from '../services/apiClient';
 
 export function NotificationPanel({ playerId, token, websocketRef, apiBase }) {
   const [notifications, setNotifications] = useState([]);
